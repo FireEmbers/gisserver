@@ -127,41 +127,41 @@ function launch() {
 
       function onResult(err, result) {
 
-        if (resultsIdx === 0) ts = Date.now();
-
         if (err) console.log(err);
 
         resultsArray[resultsIdx] = JSON.parse(result);
 
-        console.log('Arrived result #', resultsIdx);
         ++resultsIdx;
 
-        if (resultsIdx < mcSamples)
-          return;
+      }
 
-        tt = (Date.now() - ts)/1000;  
-         
-        document.getElementById('timer').innerHTML = 'Total run time:'+tt.toString();
+      function onFinished(realTime, jobTime) {
+
+        document.getElementById('realTime').innerHTML = 
+                  'Real time: '+ Math.round(realTime/1000).toString()+' s';
+
+        document.getElementById('cpTime').innerHTML = 
+                  'Crowd Process time:'+Math.round(jobTime/1000).toString()+' s';
+
+        document.getElementById('SP').innerHTML = 'SpeedUp:'+Math.round(jobTime/realTime).toString();
+
 
         document.getElementById('ppProg').innerHTML = 'Post Processing...';
 
         for (var i = 0; i < ROWS * COLS; i++)
           visArray[i] = 0;
 
-        for (var n = 0; n < mcSamples; n++) {
+        for (var n = 0; n < resultsIdx; n++) {
           for (var i = 0; i < ROWS * COLS; i++) {
-            visArray[i] += resultsArray[n][i]/ mcSamples;
+            visArray[i] += resultsArray[n][i]/ resultsIdx;
 
           }
         }
-
+        
         document.getElementById('ppProg').innerHTML = 'Post Processing...Done';
 
         showsEl('resultsButton');
 
-      }
-
-      function onFinished(realTime, jobTime) {
         console.log('the job finished in', realTime, 'it happened in', jobTime);
       }
 
@@ -565,4 +565,12 @@ function showsEl(boxid) {
 
 function hidesEl(boxid) {
   document.getElementById(boxid).style.display = "none";
+}
+
+function formatFloat(x, c) { 
+
+  var power = Math.pow(10, c); 
+
+  return Math.round(power * x)/power; 
+
 }
