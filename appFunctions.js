@@ -113,7 +113,11 @@ function launch() {
       hidesEl('input');
       showsEl('progress');
 
-      jobs.run(RunString, 1, dataArray, onProgress, onResult, onFinished);
+      jobs.run(RunString, 1, dataArray, onError, onProgress, onResult, onFinished);
+
+      function onError(error) {
+        console.error(error);
+      }
 
       function onProgress(progress) {
 
@@ -157,7 +161,9 @@ function launch() {
 
       }
 
-      function onFinished() {}
+      function onFinished(realTime, jobTime) {
+        console.log('the job finished in', realTime, 'it happened in', jobTime);
+      }
 
     });
 
