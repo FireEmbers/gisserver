@@ -52,7 +52,11 @@ function zColorNoWebGL(poly1,poly2,poly3,poly4){
     col = Math.floor(( COLS - 1)*poly4.lx + ( COLS - 1)/2);
     var idx4 = col + ( COLS)*row;
 
-    var colourValue = heatMap[idx1] /plotTime/2;//maxHeatMap/2;
+    var colourValue = heatMap[idx1] /plotTime/2;
+
+    //if (colourValue > 0.5) colourValue = 0.5;
+    //colourValue = Math.log(colourValue + 1)*0.5/Math.log(1.5);
+
 
     return colourValue;
 }

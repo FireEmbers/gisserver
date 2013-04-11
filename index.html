@@ -164,10 +164,10 @@
             <option value = 100>
                 100x100
               </option>
-            <!--option value = 150>
+            <option value = 150>
                 150x150
               </option>
-            <option value = 200>
+            <!--option value = 200>
                 200x200
               </option>
             <option value = 250>
@@ -186,7 +186,7 @@
               Moisture [%]
             </label>
             
-          <input id="moistureInput" placeholder=" % of fuel weight" value = "5"/>
+          <input id="moistureInput" placeholder=" % of fuel weight" value = "11"/>
             
           <label for="fuelLoad">
               Fuel Load
@@ -201,13 +201,13 @@
           <input id="windDir" placeholder="degrees" value = "135"/>
             
           <label for="ignPointXX">
-              Ignition Point X
+              Ignition Point X [%]
             </label>
             
           <input id="ignPointXX" placeholder="%length" value="25"/>
             
           <label for="ignPointYY">
-              Ignition Point Y
+              Ignition Point Y [%]
             </label>
             
           <input id="ignPointYY" placeholder="%width" value="25"/>
@@ -217,16 +217,16 @@
             Variable Wind speed
           </h1>
           <label for="windVelAvg">
-            Wind Speed average
+            Wind Speed average [m/s]
           </label>
           
-          <input id="windVelAvg" placeholder="m/s" value = "2"/>
+          <input id="windVelAvg" placeholder="m/s" value = "3"/>
           
           <label for="windVelDev">
-            Wind Speed standart dev
+            Wind Speed SD [%]
           </label>
           
-          <input id="windVelDev" placeholder="m/s" value = "0.5"/>
+          <input id="windVelDev" placeholder="%" value = "15"/>
           
           <label for="mcSamples">
             Monte Carlo Samples
@@ -284,18 +284,13 @@
             Forecast For:
           </label>
           <input id="rangeValue1" type="text" size="2" value="" disabled="disabled" >
-          minutes
+          [min]
           <br/>
           <input id="allowWebGL" type="checkbox" checked="" onclick="toggleChart(this)">
-          <span style="color: #ffffff">
+          <span >
             Use webGL
           </span>
-          <span style="color: #ffffff">
-            Drag to rotate.
-          </span>
-          <span style="color: #ffffff">
-            Press the shift key and drag the mouse to scale the surface plot.
-          </span>
+
         </form>
       </div>
     </div>

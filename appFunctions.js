@@ -60,9 +60,9 @@ function launch() {
   //Populate: |moiture|windSpeed|windDir|
   for (i = 0; i < mcSamples; i++) {
     dataArray[i][0] = moisture;
-    dataArray[i][1] = gauss(windVelAvg, windVelDev);
+    dataArray[i][1] = gauss(windVelAvg, windVelDev/100*windVelAvg);
     dataArray[i][1] = (dataArray[i][1] >= 0 ? dataArray[i][1] : 0);
-    console.log('windVel',dataArray[i][1]);
+    console.log('mcSample,U:',i,dataArray[i][1]);
     dataArray[i][2] = windDir;
   }
 
@@ -146,7 +146,7 @@ function launch() {
 
         for (var n = 0; n < mcSamples; n++) {
           for (var i = 0; i < ROWS * COLS; i++) {
-            visArray[i] += resultsArray[n][i] / mcSamples;
+            visArray[i] += resultsArray[n][i]/ mcSamples;
 
           }
         }
@@ -223,7 +223,6 @@ function launch() {
     var dataString = data.replace(/(.+?\n){6}/, '').match(/[\d.]+/g);
 
     //Apaga a primeira fileira de zeros do mapa de alturas
-    dataString.slice(ROWS);
 
     //pasa os elementos de string pa float 
     //(exclui a primeira e a segunda fileira de zeros) 
@@ -290,7 +289,8 @@ function visualize() {
 
   var slider = document.getElementById('slider1');
   var rangeValue = document.getElementById('rangeValue1');
-  var plotTime = slider1.value;
+
+  var plotTime = slider.value;
 
   var heightMap = new Array(ROWS * COLS);
 
@@ -325,15 +325,17 @@ function visualize() {
         heatMap[cell] = visArray[cell];
 
       //calculo do valor maximo do mapa para ficar adimensionalizado
+      maxHeatMap = 0;
       for (var cell = 0; cell < COLS * ROWS; cell++)
         maxHeatMap = (heatMap[cell] > maxHeatMap) ? heatMap[cell] : maxHeatMap;
+
 
       console.log('Max Ignition Time', maxHeatMap);
 
       //Initializes slide and rabgeValue text box
       slider.setAttribute('min',0);
       slider.setAttribute('max',maxHeatMap);
-      slider.setAttribute('step',maxHeatMap/10);
+      slider.setAttribute('step',maxHeatMap/100);
           
       console.log('Slider plot time', plotTime);
 
@@ -395,6 +397,19 @@ function visualize() {
       green: 255,
       blue: 255
     };
+
+    var lessWhite = {
+      red: 255,
+      green: 100,
+      blue: 100
+    };
+
+    var lesserWhite = {
+      red: 255,
+      green: 20,
+      blue: 20
+    };
+
     var greenIsh = {
       red: 193,
       green: 265,
@@ -425,10 +440,10 @@ function visualize() {
       green: 0,
       blue: 0
     };
-    //var colours = [colour1, colour2, colour3, colour4, colour5];
-    //var colours = [greenIsh, black];
-    var colours = [ white, colour4, colour5]; 
-    //var colours = [ white, colour5];
+    //var colours = [white, colour1, colour2, colour3, colour4, colour5];
+    var colours = [greenIsh, colour5];
+    //var colours = [ white, colour4, colour5]; 
+    //var colours = [ white,  colour5 ];
 
     // Axis labels.
     var xAxisHeader = "X-axis";
@@ -515,6 +530,20 @@ function visualize() {
 
     for (var cell = 0; cell < COLS; cell++)
       dataMap[cell] = dataMap[COLS+cell];
+
+    for (var cell = 0; cell < COLS; cell++)
+      dataMap[cell+COLS*(ROWS-1)] = dataMap[cell+COLS*(ROWS-2)];
+
+    if (ROWS > 100){
+      for (var row = 0; row < ROWS; row++){
+        //na fronteira oeste, vai buscar o valor a direira
+        dataMap[row*COLS] = dataMap[row*COLS + 1]; 
+        //na fronteira este, vai buscar o valor a esquerda
+        dataMap[(row+1)*COLS-1] = dataMap[(row+1)*COLS-2]; 
+
+      }
+
+    }
 
     return dataMap;
   }
