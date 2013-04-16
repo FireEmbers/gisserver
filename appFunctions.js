@@ -1,26 +1,18 @@
-//Variaveis da progress bar têm de ser globais por causa do scope
+//Progress bar vars have to be global
 var progressbar = $("#progressbar");
 var progressLabel = $(".progress-label");
 
 var ROWS;
 var COLS;
 
-//Global variables for Run time
-var ts;
-var tt;
-
-/* 
-    O heatMap e o maxHeatMap sao variaveis globais
-    lidas pelo ficheiro SurfacePlot.js
-*/
+//O heatMap and  plotTime are globais variables
+//read by SurfacePlot.js
 var heatMap;
-var maxHeatMap = 0;
-var plotTime;
+var plotTime = 0;
 
-//Visualization array. vector with ignition time results
+//vector with ignition time results
 //computed from Monte Carlo samples
-var visArray;
-
+var agvIgnMap;
 
 function launch() {
 
@@ -46,9 +38,8 @@ function launch() {
   var dataArray = new Array(mcSamples);
   var resultsIdx = 0;
   var resultsArray = new Array(mcSamples);
-  visArray = new Array(ROWS * COLS);
+  agvIgnMap = new Array(ROWS * COLS);
 
-  heatMap = new Array(ROWS * COLS);
 
   for (i = 0; i < mcSamples; i++) {
 
@@ -122,7 +113,6 @@ function launch() {
       function onProgress(progress) {
 
         progressbar.progressbar("value", progress);
-
       }
 
       function onResult(err, result) {
@@ -133,12 +123,14 @@ function launch() {
 
         ++resultsIdx;
 
+        console.log('Arrived result #',resultsIdx);
       }
 
       function onFinished(realTime, jobTime) {
+        //progressbar.progressbar("value", 100);
 
         document.getElementById('realTime').innerHTML = 
-                  'Real time: '+ Math.round(realTime/1000).toString()+' s';
+                  'Wall time: '+ Math.round(realTime/1000).toString()+' s';
 
         document.getElementById('cpTime').innerHTML = 
                   'Crowd Process time:'+Math.round(jobTime/1000).toString()+' s';
@@ -149,11 +141,11 @@ function launch() {
         document.getElementById('ppProg').innerHTML = 'Post Processing...';
 
         for (var i = 0; i < ROWS * COLS; i++)
-          visArray[i] = 0;
+          agvIgnMap[i] = 0;
 
         for (var n = 0; n < resultsIdx; n++) {
           for (var i = 0; i < ROWS * COLS; i++) {
-            visArray[i] += resultsArray[n][i]/ resultsIdx;
+            agvIgnMap[i] += resultsArray[n][i]/ resultsIdx;
 
           }
         }
@@ -188,56 +180,7 @@ function launch() {
     RunString = RunString.replace(/ROWS_PC/, ROWS);
     RunString = RunString.replace(/COLS_PC/, COLS);
     launchRunner();
-  }
-
-  function arrayFromGrassFile(fileName, cb) {
-
-    var array = new Array(ROWS * COLS);
-
-    var req = new XMLHttpRequest();
-
-    req.onreadystatechange = onreadystatechange;
-
-    req.open('GET', fileName);
-
-    req.send();
-
-    function onreadystatechange() {
-
-      if (req.readyState !== 4)
-        return;
-
-      //Reads Grass file and stores data in array
-      array = readGrassFile(req.responseText);
-
-      cb(array);
-    }
-  }
-
-
-
-  function readGrassFile(data) {
-
-    /*
-      funcao que recebe ficheiros grass em string e faz parse para float array
-    */
-
-    //variavel com os valores numericos do mapa
-    var dataMap = [];
-
-    //variavel com a string do map sem cabeçalho
-    var dataString = data.replace(/(.+?\n){6}/, '').match(/[\d.]+/g);
-
-    //Apaga a primeira fileira de zeros do mapa de alturas
-
-    //pasa os elementos de string pa float 
-    //(exclui a primeira e a segunda fileira de zeros) 
-    for (var cell = 0; cell < COLS * (ROWS); cell++)
-      dataMap[cell] = parseFloat(dataString[cell]);
-
-    return dataMap;
-  }
-
+  } 
 
   function gauss(avg, sDev) {
 
@@ -248,7 +191,6 @@ function launch() {
 
     return gaussNumber;
   }
-
 
   function BoxMuller() {
 
@@ -279,15 +221,6 @@ function launch() {
 
 } //Launch
 
-function  updateBox(){
-
-  var slider = document.getElementById('slider1');
-  var rangeValue = document.getElementById('rangeValue1');
-  plotTime = slider1.value;
-
-  rangeValue.setAttribute('value',plotTime);
-
-}
 
 function visualize() {
 
@@ -296,9 +229,10 @@ function visualize() {
   var slider = document.getElementById('slider1');
   var rangeValue = document.getElementById('rangeValue1');
 
-  var plotTime = slider.value;
+  plotTime = slider.value;
 
   var heightMap = new Array(ROWS * COLS);
+  heatMap = new Array(ROWS * COLS);
 
   showsEl('visualization');
 
@@ -306,44 +240,35 @@ function visualize() {
 
   function setUp() {
 
-    //Cria request para leitura dos results e alturas
-    //req -> request, objecto que vai conter os dados do ficheiro
-    var req = new XMLHttpRequest();
 
-    //Lanca funcao de leitura
-    req.onreadystatechange = onreadystatechange;
+    arrayFromGrassFile('/InputMaps/malcataHeight_' + ROWS.toString() + '.grass', onHeightMap);
 
-    //requeste do mapa de altimetria
-    req.open('GET', '/InputMaps/malcataHeight_' + ROWS.toString() + '.grass', true);
-    req.send();
+    function onHeightMap(fileArray){
 
-    function onreadystatechange() {
+      heightMap = fileArray;
 
-      if (req.readyState !== 4)
-        return;
+      //remove zero height in borders from grass height maps 
+      if (ROWS > 100){
+        for (var row = 0; row < ROWS; row++){
+          //na fronteira oeste, vai buscar o valor a direira
+          heightMap[row*COLS] = heightMap[row*COLS + 1]; 
+          //na fronteira este, vai buscar o valor a esquerda
+          heightMap[(row+1)*COLS-1] = heightMap[(row+1)*COLS-2]; 
+        }
+      }
 
-      //le ficheiro de altimetria e cria mapa de altimetria
-      //heightMap tem formato vector
-      heightMap = readGrassFile(req.responseText)
-
-      //Reinitialize heatMap (erases zeroes)
+      //Reinitialize heatMap (erases zeroes) 
+      //had to be done, don't know why
       for (var cell = 0; cell < COLS * ROWS; cell++)
-        heatMap[cell] = visArray[cell];
+        heatMap[cell] = agvIgnMap[cell];
 
-      //calculo do valor maximo do mapa para ficar adimensionalizado
-      maxHeatMap = 0;
-      for (var cell = 0; cell < COLS * ROWS; cell++)
-        maxHeatMap = (heatMap[cell] > maxHeatMap) ? heatMap[cell] : maxHeatMap;
-
-
-      console.log('Max Ignition Time', maxHeatMap);
+      //compute maximum element
+      maxHeatMap = arrayMax(heatMap, COLS*ROWS); 
 
       //Initializes slide and rabgeValue text box
       slider.setAttribute('min',0);
       slider.setAttribute('max',maxHeatMap);
       slider.setAttribute('step',maxHeatMap/100);
-          
-      console.log('Slider plot time', plotTime);
 
       //Burned area limit
       for (var cell = 0; cell < COLS * ROWS; cell++) {
@@ -355,7 +280,7 @@ function visualize() {
       plotZ();
 
     }
-    
+
   }
 
   function plotZ() {
@@ -363,13 +288,12 @@ function visualize() {
 
     var tooltipStrings = new Array();
     var values = new Array(ROWS);
-    var data = {
+    var data = { 
       nRows: ROWS,
       nCols: COLS,
       formattedValues: values
     };
 
-    //var d = 360 / ROWS;
     var idx = 0;
 
     for (var i = 0; i < ROWS; i++) {
@@ -485,8 +409,6 @@ function visualize() {
     };
 
     // Options plot 1
-
-
     var options = {
       left: 0,
       right: 0,
@@ -503,61 +425,23 @@ function visualize() {
     };
 
     surfacePlot.draw(data, options, basicPlotOptions, glOptions);
-
-    // Link the two charts for rotation.
-    //var plot1 = surfacePlot.getChart();
-    //plot1.otherPlots = [plot2];
   }
 
-  
+
   function toggleChart(chkbox) {
     surfacePlot.redraw();
   }
 
-  function readGrassFile(data) {
-
-    /*
-        funcao para leitura de ficheiro e criacao de matrix para ser plotado
-      */
-
-    //variavel com os valores numericos do mapa
-    var dataMap = [];
-
-    //variavel com a string do map sem cabeçalho
-    var dataString = data.replace(/(.+?\n){6}/, '').match(/[\d.]+/g);
-
-    //Apaga a primeira fileira de zeros do mapa de alturas
-    //dataString.slice(ROWS);
-
-    //pasa os elementos de string pa float 
-    //(exclui a primeira e a segunda fileira de zeros) 
-    for (var cell = 0; cell < COLS * (ROWS); cell++)
-      dataMap[cell] = parseFloat(dataString[cell]);
-
-    for (var cell = 0; cell < COLS; cell++)
-      dataMap[cell] = dataMap[COLS+cell];
-
-    for (var cell = 0; cell < COLS; cell++)
-      dataMap[cell+COLS*(ROWS-1)] = dataMap[cell+COLS*(ROWS-2)];
-
-    if (ROWS > 100){
-      for (var row = 0; row < ROWS; row++){
-        //na fronteira oeste, vai buscar o valor a direira
-        dataMap[row*COLS] = dataMap[row*COLS + 1]; 
-        //na fronteira este, vai buscar o valor a esquerda
-        dataMap[(row+1)*COLS-1] = dataMap[(row+1)*COLS-2]; 
-
-      }
-
-    }
-
-    return dataMap;
-  }
-
 }//Visualize
 
+function updateRange(){
 
+  var slider = document.getElementById('slider1');
+  var rangeValue = document.getElementById('rangeValue1');
 
+  rangeValue.setAttribute('value',formatFloat(slider.value, 0));
+
+}
 
 function showsEl(boxid) {
   document.getElementById(boxid).style.display = "initial";
@@ -572,5 +456,60 @@ function formatFloat(x, c) {
   var power = Math.pow(10, c); 
 
   return Math.round(power * x)/power; 
+}
 
+function arrayFromGrassFile(fileName, cb) {
+
+    /*
+      Reads grass file and creates a numerical 1D array with data.
+      ROWS AND COLS must be global vars.
+
+      The array is an argument to the callback function
+    */
+
+    var array = new Array(ROWS * COLS);
+
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = onreadystatechange;
+
+    req.open('GET', fileName);
+
+    req.send();
+
+    function onreadystatechange() {
+
+      if (req.readyState !== 4)
+        return;
+
+      array = readGrassFile(req.responseText);
+
+      cb(array);
+    }
+}
+
+function readGrassFile(data) {
+
+  /*
+    receives grass file data in string format and returns a float array
+  */
+
+  var dataMap = [];
+
+  //removes grass file header
+  var dataString = data.replace(/(.+?\n){6}/, '').match(/[\d.]+/g);
+
+  for (var cell = 0; cell < COLS * ROWS; cell++)
+    dataMap[cell] = parseFloat(dataString[cell]);
+
+  return dataMap;
+}
+
+function arrayMax(array, maxIdx){
+  var max = 0;
+
+  for (var i = 0; i < maxIdx; i++)
+    max = (array[i] > max) ? array[i] : max;
+
+  return max;
 }

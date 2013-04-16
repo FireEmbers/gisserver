@@ -277,14 +277,14 @@
         <div id = 'visualization'>
       <div>
         <form>
-          <input id="slider1" type="range" min="0" max="100" step="1" value = "0" onchange="updateBox()"/>
+          <input id="slider1" type="range" min="0" max="100" step="1" value = "0" onchange="updateRange()"/>
           <button id="goButton" type="button" onclick="visualize()">
             Go
           </button>
           <label for="rangeValue1">
             Forecast For:
           </label>
-          <input id="rangeValue1" type="text" size="2" value="" disabled="disabled" >
+          <input id="rangeValue1" type="text" size="2" value="0" disabled="disabled" >
           [min]
           <br/>
           <input id="allowWebGL" type="checkbox" checked="" onclick="toggleChart(this)">
