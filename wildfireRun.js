@@ -1,4 +1,4 @@
-/*
+  /*
 
 Deterministic fire model based on firelib + a cellular automata 
 fire growth model (FGM)
@@ -72,27 +72,7 @@ function Run(dataArray){
 
   loadTerrainMaps();
 
-  //Init maps
-  for (cell = 0; cell < cells; cell++){
-    ignMap[cell]      = INF;
-    moistMap[cell]    = MOISTUREPART;
-    windUMap[cell]    = WINDU;
-    windDirMap[cell]  = WINDDIR;
-    //Aspect in firelib is N=0 and clockwise 
-    aspectMap[cell] = (aspectMap[cell] - 90 < 0) ?                            
-                        aspectMap[cell] - 90 + 360  : aspectMap[cell] - 90 ; 
-    //while in Grass is percentage rise/reach.
-    //Slope in firelib is a fraction
-    slopeMap[cell]    = slopeMap[cell]/100;                  
-  }
-
-  for (cell = 0; cell < cells; cell++){ 
-    ros0Map[cell]     = noWindNoSlope(cell);
-    rosMaxMap[cell]   = windAndSlope(cell);
-  }
-
-  //Ignition point at terrain midle
-  ignMap[Math.floor(COLS/4) + Math.floor(ROWS/4)*COLS] = 0;
+  initMaps();
 
   //Compute distance and Azimuth of neighbour
   calcDistAzm();
@@ -100,6 +80,14 @@ function Run(dataArray){
 
   //Call and time FGM cycle
   FGM();
+
+  //Return ignition map
+  //return md5(JSON.stringify(ignMap));
+
+  for (cell = 0; cell < ROWS*COLS; cell++)
+    ignMap[cell] = parseFloat(ignMap[cell].toFixed(2));
+
+  return JSON.stringify(ignMap);
 
   function noWindNoSlope(idx){
 
@@ -276,7 +264,6 @@ function Run(dataArray){
     }
 
     return ( spreadMaxIdx);
-
   }
 
   function spreadAnyAzimuth(idx, azimuth){
@@ -304,10 +291,7 @@ function Run(dataArray){
     }
 
     return spreadAny;
-
   }
-
-
 
   function FGM(){
 
@@ -319,7 +303,7 @@ function Run(dataArray){
         for ( col = 0; col < COLS; col++){
           cell = col + COLS*row;
           
-          //If cell will burn only in the future, skips and update timeNext if necessary
+          //If the cell burns only in the future, skips and update timeNext if necessary
           //finds the minimum timeNext from the cells ignition times
           if ( ignMap[cell] > timeNow && timeNext > ignMap[cell] ){
 
@@ -365,17 +349,6 @@ function Run(dataArray){
     }
   }
 
-  //Return ignition map
-  //return md5(JSON.stringify(ignMap));
-
-  for (cell = 0; cell < ROWS*COLS; cell++)
-    ignMap[cell] = parseFloat(ignMap[cell].toFixed(2));
-
-  return JSON.stringify(ignMap);
-
-  //"SpreadAtAzimuth"
-  //function spreadAtAzimuth(){
-
   function time(func){
     var start = Date.now();
     func();
@@ -400,10 +373,34 @@ function Run(dataArray){
     fuelObj.Fuel_WindE = 1.87845e+07;
 
     return fuelObj;
-
   }
 
+  function initMaps(){
 
+    //Init maps
+    for (cell = 0; cell < cells; cell++){
+      ignMap[cell]      = INF;
+      moistMap[cell]    = MOISTUREPART;
+      windUMap[cell]    = WINDU;
+      windDirMap[cell]  = WINDDIR;
+      //Aspect in firelib is N=0 and clockwise 
+      aspectMap[cell] = (aspectMap[cell] - 90 < 0) ?                            
+                          aspectMap[cell] - 90 + 360  : aspectMap[cell] - 90 ; 
+      //while in Grass is percentage rise/reach.
+      //Slope in firelib is a fraction
+      slopeMap[cell]    = slopeMap[cell]/100;                  
+    }
+
+    for (cell = 0; cell < cells; cell++)
+      ros0Map[cell]     = noWindNoSlope(cell);
+    
+
+    for (cell = 0; cell < cells; cell++)
+      rosMaxMap[cell]   = windAndSlope(cell);
+
+    //Ignition point at terrain midle
+    ignMap[Math.floor(COLS/4) + Math.floor(ROWS/4)*COLS] = 0;
+  }
 
   function calcDistAzm(){
     for ( n = 0; n<nStencil; n++ ){
