@@ -155,7 +155,7 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
 
   function createFuelProps(){
     var array;
-    fuelObj = new Object();
+    fuelObj = {};
 
     fuelObj.Fuel_AreaWtg = 1.00000e+00;
     fuelObj.Fuel_LifeRxFactor =2.85775e+03;
@@ -212,11 +212,8 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
     x *= 0.3048;
     return x;
   }
-function
-   metersToFeet(x){
+  function metersToFeet(x){
     x *= 3.2808399;
     return x;
   }
-
-
-}
+};

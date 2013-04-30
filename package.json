@@ -1,0 +1,32 @@
+{
+  "name": "fireApp",
+  "title": "Fireapp",
+  "description": "The best project ever.",
+  "version": "0.0.1",
+  "author": {
+    "name": "fsousa"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "undefined/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "src/program.js",
+  "engines": {
+    "node": {
+      "node": ">=0.10.x"
+    }
+  },
+  "scripts": {
+    "test": "./node_modules/tape/bin/tape test/*.js"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-jshint": "~0.4.3",
+    "grunt-browserify": "~0.2.3",
+    "grunt-contrib-watch": "~0.3.1",
+    "tape": "~0.3.3"
+  }
+}

@@ -1,6 +1,6 @@
 /*
 
-Test bench for deterministic fire spread algorithm in nodejs
+Wrapper for deterministic fire spread algorithm in nodejs
 
 Loads template file and replaces 'macro' strings  
 

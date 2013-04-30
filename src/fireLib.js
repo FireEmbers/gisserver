@@ -17,13 +17,13 @@ function noWindNoSlope(idx, fuelProps, moistMap, rxIntensityMap){
 
   ratio = AreaWtg*moistMap[idx]/fuelProps.Fuel_Mext;
 
-  rxIntensity =  fuelProps.Fuel_LifeRxFactor                       
-                  *(1-2.59*ratio + 5.11*ratio*ratio - 3.52*ratio*ratio*ratio); //EtaM
+  rxIntensity =  fuelProps.Fuel_LifeRxFactor*
+  (1-2.59*ratio + 5.11*ratio*ratio - 3.52*ratio*ratio*ratio); //EtaM
   
   rxIntensityMap[idx] = rxIntensity;
 
   Spread0Idx = fuelProps.Fuel_PropFlux*rxIntensity /
-                      ((250. + 1116.*moistMap[idx])*AreaWtg*    //Qig - Heat of pre Ignition
+                      ((250.0 + 1116.0*moistMap[idx])*AreaWtg*    //Qig - Heat of pre Ignition
                        fuelProps.Fuel_LifeAreaWtg*
                        fuelProps.Fuel_SigmaFactor*
                        fuelProps.Fuel_BulkDensity);
@@ -59,7 +59,7 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
   //PhiWind tem um teste < smidgen em relacao a velocidade do vento WindUMap... 
   phiEw = phiSlope + phiWind;
 
-  if((upSlope = aspectMap[idx]) >= 180.)
+  if((upSlope = aspectMap[idx]) >= 180.0)
     upSlope = upSlope - 180;
   else
     upSlope = upSlope + 180;
@@ -98,12 +98,12 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
     
     if(effectiveWind  >  smidgen) {
 
-      lwRatio  = 1. + 0.002840909 * effectiveWind ;
+      lwRatio  = 1.0 + 0.002840909 * effectiveWind ;
       if (lwRatio  > 1.00001)
         eccentricityMap[idx] = Math.sqrt(lwRatio *lwRatio  - 1)/lwRatio ;
     }
 
-    phiEffWindMap[idx]  = phiEw;
+    phiEff0WindMap[idx]  = phiEw;
   }
 
   //Situation 4 and 5 - slope with no wind and wind blows upSlope
@@ -121,8 +121,8 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
 
     if(effectiveWind  >  smidgen) {
 
-      lwRatio  = 1. + 0.002840909 * effectiveWind;
-      if (lwRatio  > 1.00001)
+      lwRatio  = 1.0 + 0.002840909 * effectiveWind;
+      if (lwRatio  > 1.000001)
         eccentricityMap[idx] = Math.sqrt(lwRatio *lwRatio  - 1)/lwRatio ;
     }
 
@@ -135,7 +135,7 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
     if (upSlope <= split )
       split  = split  - upSlope;
     else
-      split  = 360. - upSlope + split ;
+      split  = 360.0 - upSlope + split ;
 
     split  = DegToRad(split );
     x   = spread0Idx *(phiSlope + phiWind*Math.cos(split ));
@@ -145,14 +145,14 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
     spreadMax = spread0Idx  + Rv ;
     phiEw = spreadMax / spread0Idx  - 1;
     a  = Math.asin(Math.abs(y ) / Rv );
-    if(x  >= 0.)
-      a  = (y  >= 0.) ? a           : M_PI + M_PI - a ;
+    if(x  >= 0.0)
+      a  = (y  >= 0.0) ? a           : M_PI + M_PI - a ;
     else
-      a  = (y  >= 0.) ? (M_PI - a ) : M_PI + a ;
+      a  = (y  >= 0.0) ? (M_PI - a ) : M_PI + a ;
     
     split  = RadToDeg(a );
-    if (upSlope + split  > 306.)
-      azimuthMaxMap[idx] = upSlope + split  - 360.;
+    if (upSlope + split  > 306.0)
+      azimuthMaxMap[idx] = upSlope + split  - 360.0;
     else
       azimuthMaxMap[idx] = upSlope + split ;
 
@@ -171,7 +171,7 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
 
     if(effectiveWind  >  smidgen) {
 
-      lwRatio  = 1. + 0.002840909 * effectiveWind ;
+      lwRatio  = 1.0 + 0.002840909 * effectiveWind ;
       if (lwRatio  > 1.00001)
         eccentricityMap[idx] = Math.sqrt(lwRatio *lwRatio  - 1)/lwRatio ;
     }
@@ -184,7 +184,7 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
   return ( spreadMaxIdx);
 }
 
-function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap, 
+function spreadAnyAzimut0h(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap, 
                             eccentricityMap, ros0Map )
 {
 
@@ -198,7 +198,7 @@ function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap,
   else {
   
     if ((dir = Math.abs(azimuthMaxMap[idx] - azimuth)) > 180)
-      dir = 360. - dir;
+      dir = 360.0 - dir;
 
     dir = DegToRad(dir);
 
@@ -215,11 +215,10 @@ function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap,
 
 function calcDistAzm(){
   for ( n = 0; n<nStencil; n++ ){
-      nDist[n] = Math.sqrt ( nCol[n] * CellWd * nCol[n] * CellWd
-                      + nRow[n] * CellHt * nRow[n] * CellHt );
+      nDist[n] = Math.sqrt ( nCol[n] * CellWd * nCol[n] * CellWd + nRow[n] * CellHt * nRow[n] * CellHt );
 
       if (n < 8)
-        nAzm[n] = n * 45.;
+        nAzm[n] = n * 45.0;
       else
       {
 
@@ -229,13 +228,13 @@ function calcDistAzm(){
           nAzm[n] = RadToDeg(  Math.abs( nAzm[n] ));
 
         if ( nCol[n] > 0  && nRow[n] > 0) //2st quadrant 
-          nAzm[n] = 180. - RadToDeg( nAzm[n] ) ;
+          nAzm[n] = 180.0 - RadToDeg( nAzm[n] ) ;
 
         if ( nCol[n] < 0  && nRow[n] > 0) //3st quadrant 
-          nAzm[n] = RadToDeg( Math.abs( nAzm[n] ) )+ 180.;
+          nAzm[n] = RadToDeg( Math.abs( nAzm[n] ) )+ 180.0;
 
         if ( nCol[n] < 0  && nRow[n] < 0) //4st quadrant 
-          nAzm[n] = 360. - RadToDeg( Math.abs( nAzm[n] ));
+          nAzm[n] = 360.0 - RadToDeg( Math.abs( nAzm[n] ));
       }
   }
 }
@@ -243,7 +242,7 @@ function calcDistAzm(){
 function DegToRad(x) {
   x *= 0.017453293;
   return x;
-} 
+}
 
 function RadToDeg(x) {
   x *= 57.29577951;
@@ -257,6 +256,6 @@ function equal(x,y){
     return false;
 }
 
-module.exports = windAndSlope;
+module.exports = winddAndSlope;
 module.exports = spreadAnyAzimuth;
 module.exports = noWindNoSlope;
