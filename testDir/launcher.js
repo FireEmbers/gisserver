@@ -1,44 +1,33 @@
 /*
 
-Code wrap for cpFGM.js.
+Test bench for deterministic fire spread algorithm in nodejs
 
-Launchs and times Run() locally
-
-Can run on web-browser mode and nodejs mode
+Loads template file and replaces 'macro' strings  
 
 */
 
-var RunString = require('./../wildfireRun').toString();
+var fs = require('fs');
 
-//comment if not in nodejs mode
-var fs = require('fs'); 
+var ROWS = 100;
+var COLS = 100;
 
-var ROWS = 500;
-var COLS = 500;
-
-var MOISTUREPART = 11;             
-var WINDU = 1;          
-var WINDDIR = 135; 
+var MOISTUREPART = 11;
+var WINDU = 1;
+var WINDDIR = 135;
 
 var dataUnit = [MOISTUREPART, WINDU, WINDDIR];
 
 var slopeArray = new Array(ROWS*COLS);
 var aspectArray = new Array(ROWS*COLS);
 
-var runnerCounter = 2;
+var runnerCounter = 3;
 
-//Choose if in nodejs mode
-//arrayFromGrassFile('./InputMaps/malcataSlope_' + ROWS.toString() + '.grass', onSlopeArray);
-//arrayFromGrassFile('./InputMaps/malcataAspect_' + ROWS.toString() + '.grass', onAspectArray);
-
-//Choose if not in nodejs mode
-arrayFromGrassFileNode('./InputMaps/malcataSlope_' + ROWS.toString() + '.grass', onSlopeArray);
-arrayFromGrassFileNode('./InputMaps/malcataAspect_' + ROWS.toString() + '.grass', onAspectArray);
+arrayFromGrassFileNode('./../InputMaps/malcataSlope_' + ROWS.toString() + '.grass', onSlopeArray);
+arrayFromGrassFileNode('./../InputMaps/malcataAspect_' + ROWS.toString() + '.grass', onAspectArray);
 
 function onSlopeArray(fileArray){
  
   slopeArray = fileArray;
-  RunString = RunString.replace(/SLOPEMAP_PC/, JSON.stringify(slopeArray));
   //console.log('Slope Map is loaded in string "Run"');
   //print2D(slopeArray,'slopeMap.csv');  
   launchRunner();
@@ -47,7 +36,6 @@ function onSlopeArray(fileArray){
 function onAspectArray(fileArray){
  
   aspectArray = fileArray;
-  RunString = RunString.replace(/ASPECTMAP_PC/, JSON.stringify(aspectArray));
   //console.log('Aspect Map is loaded in string "Run"');
   //print2D(aspectArray,'aspectMap.csv');
   launchRunner();
@@ -60,21 +48,23 @@ function launchRunner(){
   if (runnerCounter > 0)
     return;
 
-  RunString = RunString.replace(/ROWS_PC/,ROWS.toString());
-  RunString = RunString.replace(/COLS_PC/,COLS.toString());  
+  stringFromFile('./template.js',onTemplateRead);
 
-  eval(RunString); 
+  function onTemplateRead(templateString){
 
-  var ts = Date.now();
+    var RunString = templateString +';function Run( dataUnit ){ 
+                                      return template(dataUnit, ROWS, COLS, aspectArray, slopeArray) }' 
 
-  var ignitionMap = JSON.parse(Run(dataUnit));
+    var ts = Date.now();
 
-  
+    var ignitionMap = JSON.parse(Run(dataUnit));
 
-  console.log(ROWS,COLS,(Date.now()-ts)/1000);
+    console.log(ROWS,COLS,(Date.now()-ts)/1000);
 
-  //print2D(ignitionMap,'ignitionMap.csv');
-  //console.log(ignitionMap);
+    print2D(ignitionMap,'./../Verification/ignMapSlowFGMCaseAX'+ ROWS.toString()+'.csv');
+    //console.log(ignitionMap);
+
+  }
 
 }
 
@@ -115,7 +105,7 @@ function readGrassFileNode(data) {
     array[cell] = parseFloat(dataString[cell]);
 }
 
-function arrayFromGrassFile(fileName, cb) {
+function arrayFromGrassFileAjax(fileName, cb) {
 
     /*
       Reads grass file and creates a numerical 1D array with data.
@@ -139,13 +129,13 @@ function arrayFromGrassFile(fileName, cb) {
       if (req.readyState !== 4)
         return;
 
-      array = readGrassFile(req.responseText);
+      array = readGrassFileAjax(req.responseText);
 
       cb(array);
     }
 }
 
-function readGrassFile(data) {
+function readGrassFileAjax(data) {
 
   /*
     receives grass file data in string format and returns a float array
@@ -160,6 +150,22 @@ function readGrassFile(data) {
     dataMap[cell] = parseFloat(dataString[cell]);
 
   return dataMap;
+}
+
+function stringFromFile(fileName, cb) {
+
+    /*
+      Loads generic file and uses string in the callback 
+    */
+
+    fs.readFile (fileName, {encoding: 'utf8'}, 'r' ,onFileRead);
+
+    function onFileRead(err,data){
+
+      if (err) throw err;
+
+      cb(data);
+    }
 }
 
 function print2D(data, fileName) {

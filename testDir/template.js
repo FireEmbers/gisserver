@@ -1,0 +1,1 @@
+../template/build/template.js

@@ -1,3 +1,11 @@
+var res = INF;
+var nitt = 0;
+var ignTimeMin;
+
+           //N   NE   E  SE  S  SW   W  NW   a   b   c   d   e  f   g  h 
+var nCol = [ 0,   1,  1,  1, 0, -1, -1, -1, -1,  1, -2,  2, -2, 2, -1, 1];
+var nRow = [ -1, -1,  0,  1, 1,  1,  0, -1, -2, -2, -1, -1,  1, 1,  2, 2];
+
 function FGM(){
 
   /*
@@ -8,13 +16,12 @@ function FGM(){
     see Sousa et all, Simulation of surface fire fronts using fireLib and GPUs, 2012
   */
 
-  var res = INF;
-  var nitt = 0;
-  var ignTimeMin;
+  initMaps();
 
-  var ignMap_new = Array(ROWS*COLS);
+  ignMapNew = ignMap;
 
-  ignMap_new = ignMap;
+  //Compute distance and Azimuth of neighbour
+  calcDistAzm();
 
   //Main iterative cycle
   //keeps going until solution is converged: residue is zero
