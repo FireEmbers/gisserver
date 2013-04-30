@@ -34,8 +34,9 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   var CellHt = W/COLS;
 
   var INF = 9999999999999;
-  var M_PI = 3.141592653589793;
   var smidgen = 1E-6;
+
+  
   var nStencil = 16;
 
   var row, col, nrow, ncol;
@@ -129,7 +130,8 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
             if ( !(ignNcell > timeNow && rosMaxMap[cell] >= smidgen ))
               continue;
 
-            ros = fireLib.spreadAnyAzimuth(cell, nAzm[n]);
+            ros = fireLib.spreadAnyAzimuth(cell, nAzm[n], phiEffWindMap, azimuthMaxMap, rosMaxMap, 
+                            eccentricityMap, ros0Map );
 
             ignTime = timeNow + nDist[n] / ros;
 
@@ -144,6 +146,33 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
         }
       }
     }
+
+    function calcDistAzm(){
+      for ( n = 0; n<nStencil; n++ ){
+          nDist[n] = Math.sqrt ( nCol[n] * CellWd * nCol[n] * CellWd + nRow[n] * CellHt * nRow[n] * CellHt );
+
+          if (n < 8)
+            nAzm[n] = n * 45.0;
+          else
+          {
+
+            nAzm[n] = Math.atan( (nCol[n] * CellWd) / (nRow[n] * CellHt) );
+
+            if ( nCol[n] > 0  && nRow[n] < 0) //1st quadrant 
+              nAzm[n] = RadToDeg(  Math.abs( nAzm[n] ));
+
+            if ( nCol[n] > 0  && nRow[n] > 0) //2st quadrant 
+              nAzm[n] = 180.0 - RadToDeg( nAzm[n] ) ;
+
+            if ( nCol[n] < 0  && nRow[n] > 0) //3st quadrant 
+              nAzm[n] = RadToDeg( Math.abs( nAzm[n] ) )+ 180.0;
+
+            if ( nCol[n] < 0  && nRow[n] < 0) //4st quadrant 
+              nAzm[n] = 360.0 - RadToDeg( Math.abs( nAzm[n] ));
+          }
+      }
+    }
+
   }
 
   function time(func){
@@ -193,9 +222,9 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
     
 
     for (cell = 0; cell < cells; cell++)
-      rosMaxMap[cell] = fireLib.windAndSlope(cell, slopeMap, ros0Map, windUMap, 
+      rosMaxMap[cell] = fireLib.windAndSlope(cell, fuelProps, slopeMap, ros0Map, windUMap, 
                         windDirMap, aspectMap, azimuthMaxMap, eccentricityMap, 
-                        phiEffWindMap );
+                        phiEffWindMap, rxIntensityMap);
 
     //Ignition point at terrain midle
     ignMap[Math.floor(COLS/4) + Math.floor(ROWS/4)*COLS] = 0;
@@ -214,6 +243,16 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   }
   function metersToFeet(x){
     x *= 3.2808399;
+    return x;
+  }
+
+  function DegToRad(x) {
+    x *= 0.017453293;
+    return x;
+  }
+
+  function RadToDeg(x) {
+    x *= 57.29577951;
     return x;
   }
 };

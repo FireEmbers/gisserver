@@ -10,14 +10,14 @@ module.exports = function(grunt) {
         src: 'src/program.js',
         dest: 'build/program.js',
         options: {
-          standalone: 'Run'
+          standalone: 'Core'
         }
       },
       debug: {
         src: 'src/program.js',
         dest: 'build/program.debug.js',
         options: {
-          standalone: 'Run',
+          standalone: 'Core',
           debug: true
         }
       }

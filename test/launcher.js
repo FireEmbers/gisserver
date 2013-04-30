@@ -5,11 +5,10 @@ Wrapper for deterministic fire spread algorithm in nodejs
 Loads template file and replaces 'macro' strings  
 
 */
+var Core = require('..');
 
-var fs = require('fs');
-
-var ROWS = 100;
-var COLS = 100;
+var ROWS = 50;
+var COLS = 50;
 
 var MOISTUREPART = 11;
 var WINDU = 1;
@@ -20,7 +19,7 @@ var dataUnit = [MOISTUREPART, WINDU, WINDDIR];
 var slopeArray = new Array(ROWS*COLS);
 var aspectArray = new Array(ROWS*COLS);
 
-var runnerCounter = 3;
+var runnerCounter = 2;
 
 arrayFromGrassFileNode('./../InputMaps/malcataSlope_' + ROWS.toString() + '.grass', onSlopeArray);
 arrayFromGrassFileNode('./../InputMaps/malcataAspect_' + ROWS.toString() + '.grass', onAspectArray);
@@ -28,7 +27,7 @@ arrayFromGrassFileNode('./../InputMaps/malcataAspect_' + ROWS.toString() + '.gra
 function onSlopeArray(fileArray){
  
   slopeArray = fileArray;
-  //console.log('Slope Map is loaded in string "Run"');
+  console.log('Slope Map is loaded in string "Run"');
   //print2D(slopeArray,'slopeMap.csv');  
   launchRunner();
 }
@@ -36,7 +35,7 @@ function onSlopeArray(fileArray){
 function onAspectArray(fileArray){
  
   aspectArray = fileArray;
-  //console.log('Aspect Map is loaded in string "Run"');
+  console.log('Aspect Map is loaded in string "Run"');
   //print2D(aspectArray,'aspectMap.csv');
   launchRunner();
 }  
@@ -48,20 +47,20 @@ function launchRunner(){
   if (runnerCounter > 0)
     return;
 
-  stringFromFile('./template.js',onTemplateRead);
+  stringFromFile('../build/program.min.js', onTemplateRead);
 
   function onTemplateRead(templateString){
 
-    var RunString = templateString +';function Run( dataUnit ){ 
-                                      return template(dataUnit, ROWS, COLS, aspectArray, slopeArray) }' 
+    function Run(dataUnit){return Core(dataUnit, ROWS, COLS, aspectArray, slopeArray);}
 
+    console.log(Run);
     var ts = Date.now();
 
     var ignitionMap = JSON.parse(Run(dataUnit));
 
     console.log(ROWS,COLS,(Date.now()-ts)/1000);
 
-    print2D(ignitionMap,'./../Verification/ignMapSlowFGMCaseAX'+ ROWS.toString()+'.csv');
+    //print2D(ignitionMap,'./../Verification/ignMapSlowFGMCaseAX'+ ROWS.toString()+'.csv');
     //console.log(ignitionMap);
 
   }
@@ -79,13 +78,15 @@ function arrayFromGrassFileNode(fileName, cb) {
       The array is an argument to the callback function
     */
 
+    var fs = require('fs');
+
     fs.readFile (fileName, {encoding: 'utf8'}, 'r' ,onFileRead);
 
     function onFileRead(err,data){
 
       if (err) throw err;
 
-      readGrassFile(data.toString());
+      readGrassFileNode(data.toString());
 
       cb(array);
     }
@@ -157,6 +158,8 @@ function stringFromFile(fileName, cb) {
     /*
       Loads generic file and uses string in the callback 
     */
+
+    var fs = require('fs');
 
     fs.readFile (fileName, {encoding: 'utf8'}, 'r' ,onFileRead);
 

@@ -4,6 +4,10 @@
 
 */
 
+var smidgen = 1E-6;
+var M_PI = 3.141592653589793;
+var INF = 9999999999999;
+
 
 function noWindNoSlope(idx, fuelProps, moistMap, rxIntensityMap){
 
@@ -31,8 +35,8 @@ function noWindNoSlope(idx, fuelProps, moistMap, rxIntensityMap){
   return Spread0Idx;
 }
 
-function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
-                        azimuthMaxMap, eccentricityMap, phiEffWindMap )
+function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
+                        azimuthMaxMap, eccentricityMap, phiEffWindMap, rxIntensityMap )
 {
 
   var windB, windK,  phiSlope, phiWind, phiEw, upSlope, spreadMax, spreadMaxIdx;
@@ -184,7 +188,7 @@ function windAndSlope(idx, slopeMap, ros0Map, windUMap, windDirMap, aspectMap,
   return ( spreadMaxIdx);
 }
 
-function spreadAnyAzimut0h(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap, 
+function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap, 
                             eccentricityMap, ros0Map )
 {
 
@@ -213,31 +217,6 @@ function spreadAnyAzimut0h(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap
   return spreadAny;
 }
 
-function calcDistAzm(){
-  for ( n = 0; n<nStencil; n++ ){
-      nDist[n] = Math.sqrt ( nCol[n] * CellWd * nCol[n] * CellWd + nRow[n] * CellHt * nRow[n] * CellHt );
-
-      if (n < 8)
-        nAzm[n] = n * 45.0;
-      else
-      {
-
-        nAzm[n] = Math.atan( (nCol[n] * CellWd) / (nRow[n] * CellHt) );
-
-        if ( nCol[n] > 0  && nRow[n] < 0) //1st quadrant 
-          nAzm[n] = RadToDeg(  Math.abs( nAzm[n] ));
-
-        if ( nCol[n] > 0  && nRow[n] > 0) //2st quadrant 
-          nAzm[n] = 180.0 - RadToDeg( nAzm[n] ) ;
-
-        if ( nCol[n] < 0  && nRow[n] > 0) //3st quadrant 
-          nAzm[n] = RadToDeg( Math.abs( nAzm[n] ) )+ 180.0;
-
-        if ( nCol[n] < 0  && nRow[n] < 0) //4st quadrant 
-          nAzm[n] = 360.0 - RadToDeg( Math.abs( nAzm[n] ));
-      }
-  }
-}
 
 function DegToRad(x) {
   x *= 0.017453293;
@@ -256,6 +235,6 @@ function equal(x,y){
     return false;
 }
 
-module.exports = winddAndSlope;
-module.exports = spreadAnyAzimuth;
-module.exports = noWindNoSlope;
+exports.windAndSlope = windAndSlope;
+exports.spreadAnyAzimuth = spreadAnyAzimuth;
+exports.noWindNoSlope = noWindNoSlope;
