@@ -1,0 +1,28 @@
+1996/09/04  Release 1.0.0
+
+1999/03/05  Fixed NFFL07 live SAVR from 1500 to 1550.
+
+1999/03/05  Release 1.0.1
+
+1999/04/22  Added "backing" to FuelModelData structure.
+            Added Fuel_BackingRate(catalog, model) access macro.
+            Added calculation of backing spread rate to function
+                Fuel_SpreadWindSlopeMax().
+            Removed ANSI_ARG and VOID constructs.
+            Added conditional M_PI definition.
+            Removed license.txt from distribution.
+
+1999/04/22  Release 1.0.2
+
+1999/12/01  Fixed eccentricity sqrt(0) bug around line 796.
+            Fixed possible division by zero when determining SpreadAny
+            around lines 895-905.
+
+1999/12/01  Release 1.0.3
+
+2002/09/30  Added 1 to number of max fuel models allocated
+            around line 1280
+            calloc(FuelCat_MaxModels(catalog)+1, sizeof(FuelModelPtr)))
+            otherwise it was freeing to many from the array
+
+2002/09/30	Release 1.0.4

@@ -1,0 +1,84 @@
+firelib-1.0.4.README
+Copyright (C) 1996-2004 by Collin D. Bevins
+
+
+Description
+-----------
+
+fireLib is a C function library for predicting the spread rate
+and intensity of free-burning wildfires.  It is derived directly
+from the BEHAVE (Andrews 1986) FORTRAN fire behavior algorithms
+for predicting fire spread in two dimensions, but is optimized for
+highly iterative applications such as cell- or wave-based fire
+growth simulations.
+
+fireLib was developed to give fire simulation modellers a simple,
+common, and optimized application programming interface to use
+in their models.  It is written in ANSI standard C and compiles
+under a wide range of C++ and K&R compilers.
+
+fireLib consists of only 13 functions.  Eight functions create/destroy
+fuel catalog, fuel model, fuel particle, and flame length table
+objects.  The remaining five functions derive intermediate and
+final fuel and fire behavior variables by fuel model, including
+spread rate, reaction intensity, heat per unit area, fireline
+intensity, flame length, and scorch height.
+
+Included in this distribution is a Postscript version of the
+"fireLib User Manual and Technical reference", and working code for
+a simple, short, (and deprecated!) example fire simulator (fireSim)
+demonstrating fireLib usage.
+
+
+Distribution
+------------
+
+This is copyrighted and licensed software, but with very liberal terms.
+Check the license.txt file for license terms.
+
+The most recent distribution of fireLib is firelib-1.0.0 (Sep 1996).
+
+The fireLib distribution consists of:
+
+	CHANGES		change log
+	fireLib.c	fireLib C source code
+	fireLib.h	fireLib C header file
+	firelib.pdf	PDF version of user manual/tech ref
+	firelib.ps	Postscript version of user manual/tech ref
+	fireSim.c	example fire growth simulator
+	makefile	an extremely simple-minded fireSim makefile
+	README		this file
+
+
+Installation
+------------
+
+fireLib has been compiled and tested on the following
+hardware/os/compiler combinations available to me:
+
+	Intel / MSDOS / Microsoft C 6.00A
+	Intel / Win95 / Borland 4.01
+	Intel / NT 3.5 / Borland 4.5
+	Intel / UnixWare 2.0/ cc
+	Sparc / SunOS 4.3 / acc
+	RS/6000 / AIX 3.5 / clx
+
+There is only 1 source file (fireLib.c) and 1 header file (fireLib.h),
+so I haven't yet felt the need to create a configure script or any
+elaborate make file.  If you decide to create one, send me a copy to
+include in the next distribution.  Likewise, if you compile this on
+another platform/compiler, let me know!
+
+
+Bugs
+----
+
+I will try to fix bugs ASAP and provide updates on our WWW/FTP site.
+Please provide me with source and data manifesting the bug so that I
+can duplicate it on one of the platform environments listed above.
+
+
+Collin D. Bevins
+cbevins@montana.com
+October 3, 1996
+
