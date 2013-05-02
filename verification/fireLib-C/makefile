@@ -10,6 +10,9 @@ LIBS = -lm
 fireSim: fireSim.o fireLib.o fireLib.h
 	$(CC) $(CFLAGS) fireSim.c fireLib.c -o fireSim $(LIBS)
 
+fireLibTest: fireLibTest.o fireLib.o fireLib.h
+	$(CC) $(CFLAGS) fireLibTest.c fireLib.c -o fireLibTest $(LIBS)
+
 clean:
 	-rm *.o
 

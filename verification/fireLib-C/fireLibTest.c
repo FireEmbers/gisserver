@@ -29,23 +29,24 @@
 
 /* NOTE 2: Change these to set uniform burning conditions. */
 static size_t Model   = 1;      /* NFFL 1 */
-static double WindSpd = 4.;     /* mph */
-static double WindDir = 0.;     /* degrees clockwise from north */
+static double WindSpd = 1;     /* ft/min */
+static double WindDir = 0;     /* degrees clockwise from north */
 static double Slope   = 0.0;    /* fraction rise / reach */
-static double Aspect  = 0.0;    /* degrees clockwise from north */
-static double M1      = .10;    /* 1-hr dead fuel moisture */
+static double Aspect  = 100;    /* degrees clockwise from north */
+static double M1      = .05;    /* 1-hr dead fuel moisture */
 
 int main ( int argc, char **argv )
 {
 
-  double moisture[6]
+  double moisture[6];
   moisture[0] = M1;
-
-  double Windspd_ftm  = 88. * WindSpd_mph;     /* convert mph into ft/min */
 
   FuelCatalogPtr catalog = Fire_FuelCatalogCreateStandard("Standard", 13);
   Fire_SpreadNoWindNoSlope(catalog, Model, moisture);
-  Fire_SpreadWindSlopeMax(catalog, Model, Windspd_ftm, WindDir, Slope, Aspect);
+  Fire_SpreadWindSlopeMax(catalog, Model, WindSpd, WindDir, Slope, Aspect);
   Fire_SpreadAtAzimuth(catalog, Model, 45, FIRE_NONE);
+
+  FILE *fPtr = fopen("flVerification.txt", "w");
+  fprintf(fPtr, "[%f,%f,%f]", Fuel_Spread0(catalog,Model), Fuel_SpreadMax(catalog,Model), Fuel_SpreadAny(catalog,Model));
 
 }

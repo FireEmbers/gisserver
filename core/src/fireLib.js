@@ -107,7 +107,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
         eccentricityMap[idx] = Math.sqrt(lwRatio *lwRatio  - 1)/lwRatio ;
     }
 
-    phiEff0WindMap[idx]  = phiEw;
+    phiEffWindMap[idx]  = phiEw;
   }
 
   //Situation 4 and 5 - slope with no wind and wind blows upSlope
