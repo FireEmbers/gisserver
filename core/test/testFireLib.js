@@ -1,3 +1,12 @@
+/*
+
+  Tests fireLib and is very good at it
+
+  Fuel Properties are NFFL Model 1
+
+
+*/
+
 var test = require('tape');
 var fs = require('fs');
 var fireLib = require('../src/fireLib');

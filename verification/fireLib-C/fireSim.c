@@ -1,5 +1,20 @@
 /*
- *******************************************************************************
+
+    run with 
+
+        ./fireSim 1arg 2arg 3arg 4arg 5arg 6arg
+
+    1arg: Rows/Cols
+    2arg: windSpeed [m/s]
+    3arg: windDir   [º from North]
+    4arg: moistures [fraction]
+    5arg: slope file name
+    6arg: aspect file name
+
+*/
+
+      
+ /*******************************************************************************
  *
  *  fireSim.c
  *
@@ -22,42 +37,54 @@
  *      Fill the slpMap[] and aspMap[] arrays with variable terrain.
  *      Fill the wspdMap[] and wdirMap[] arrays with variable wind.
  *      Fill the m***Map[] arrays with variable fuel moistures.
- *******************************************************************************
- */
+ *******************************************************************************/
+#define DegToRad(x)     ((x)*0.017453293)
+#define RadToDeg(x)     ((x)*57.29577951) 
+
+int Rows;
+int Cols;
+
+double CellWd;    /* Cell width (E-W) in feet. */  //1 m = 3.2808 ft
+double CellHt;    /* Cell height (N-S) in feet. */ //1 m = 3.2808 ft 
 
 #include "fireLib.h"
 
 #define INFINITY 999999999.     /* or close enough */
 
-/* NOTE 1: Change these to modify map size & resolution. */
-static int    Rows   = 101;     /* Number of rows in each map. */
-static int    Cols   = 101;     /* Number of columns in each map. */
-static double CellWd = 100.;    /* Cell width (E-W) in feet. */
-static double CellHt = 100.;    /* Cell height (N-S) in feet. */
+static int PrintMap (double *map, char *fileName);
 
-/* NOTE 2: Change these to set uniform burning conditions. */
-static size_t Model   = 1;      /* NFFL 1 */
-static double WindSpd = 4.;     /* mph */
-static double WindDir = 0.;     /* degrees clockwise from north */
-static double Slope   = 0.0;    /* fraction rise / reach */
-static double Aspect  = 0.0;    /* degrees clockwise from north */
-static double M1      = .10;    /* 1-hr dead fuel moisture */
-static double M10     = .10;    /* 10-hr dead fuel moisture */
-static double M100    = .10;    /* 100-hr dead fuel moisture */
-static double Mherb   = 1.00;   /* Live herbaceous fuel moisture */
-static double Mwood   = 1.50;   /* Live woody fuel moisture */
-
-static int PrintMap (double *map, char *fileName );
-
-int main ( int argc, char **argv )
+int main ( int argc, char *argv[] )
 {
-    /* neighbor's address*/     /* N  NE   E  SE   S  SW   W  NW */
-    static int nCol[8] =        {  0,  1,  1,  1,  0, -1, -1, -1};
-    static int nRow[8] =        {  1,  1,  0, -1, -1, -1,  0,  1};
+
+    Rows = atoi(argv[1]);
+    Cols = atoi(argv[1]);
+
+    CellWd = 3.2808399*3000/Cols;    /* Cell width (E-W) in feet. */  //1 m = 3.2808 ft
+    CellHt = 3.2808399*3000/Cols;    /* Cell height (N-S) in feet. */ //1 m = 3.2808 ft 
+    
+    /* NOTE 2: Change these to set uniform burning conditions. */
+    size_t Model   = 14;                 /* NFFL 1 */
+    double WindSpd = atof(argv[2]);     /* m/s */
+    double WindDir = atof(argv[3]);                /* degrees clockwise from north */
+
+    double M1      = atof(argv[4]);    /* 1-hr dead fuel moisture */
+    double M10     = 0;                /* 10-hr dead fuel moisture */
+    double M100    = 0;                /* 100-hr dead fuel moisture */
+    double Mherb   = 0;                /* Live herbaceous fuel moisture */
+    double Mwood   = 0;                /* Live woody fuel moisture */
+
+
+    double slp_tmp, asp_tmp;     //slope and aspect temporary values    
+    char buffer[100];               //buffer when    usedm fgets skips lines
+
+    /* neighbor's address*/     //N   NE   E  SE  S  SW   W  NW   a   b   c   d   e  f   g  h 
+    static int nCol[16] =        { 0,   1,  1,  1, 0, -1, -1, -1, -1,  1, -2,  2, -2, 2, -1, 1};
+    static int nRow[16] =        { -1, -1,  0,  1, 1,  1,  0, -1, -2, -2, -1, -1,  1, 1,  2, 2};
+
     static int nTimes = 0;      /* counter for number of time steps */
     FuelCatalogPtr catalog;     /* fuel catalog handle */
-    double nDist[8];            /* distance to each neighbor */
-    double nAzm[8];             /* compass azimuth to each neighbor (0=N) */
+    double nDist[16];            /* distance to each neighbor */
+    double nAzm[16];             /* compass azimuth to each neighbor (0=N) */
     double timeNow;             /* current time (minutes) */
     double timeNext;            /* time of next cell ignition (minutes) */
     int    row, col, cell;      /* row, col, and index of current cell */
@@ -82,6 +109,10 @@ int main ( int argc, char **argv )
     double *mherbMap;           /* ptr to live herbaceous fuel moisture map */
     double *mwoodMap;           /* ptr to live stem fuel moisture map */
 
+    FILE *slope_file, *aspect_file; 
+
+    printf("Running fireSim with Rows:%d, U:%lf, Dir:%lf\n", Rows, WindSpd, WindDir);
+
     /* NOTE 3: allocate all the maps. */
     cells = Rows * Cols;
     if ( (ignMap   = (double *) calloc(cells, sizeof(double))) == NULL
@@ -103,12 +134,35 @@ int main ( int argc, char **argv )
     }
 
     /* NOTE 4: initialize all the maps -- modify them as you please. */
+    
+
+    if ( (slope_file = fopen(argv[5],"r")) == NULL ){
+        printf("Unable to open output map \"%s\".\n", argv[5]);
+        return (FIRE_STATUS_ERROR);
+    }
+
+    if ( (aspect_file = fopen(argv[6],"r")) == NULL ){
+        printf("Unable to open output map \"%s\".\n", argv[6]);
+        return (FIRE_STATUS_ERROR);
+    }
+    
+    
+    /*for (n = 0; n < 6; n++){
+            fgets(buffer, 100, slope_file);
+            fgets(buffer, 100, aspect_file);
+    }
+    */
     for ( cell=0; cell<cells; cell++ )
     {
+        fscanf(aspect_file, "%lf", &asp_tmp);
+        fscanf(slope_file, "%lf", &slp_tmp);
+        slpMap[cell] = slp_tmp/100;
+                                                             //Slope in firelib is a fraction
+        asp_tmp = (asp_tmp - 90 < 0) ?                      //while in Grass is percentage rise/reach.
+                asp_tmp - 90 + 360  : asp_tmp - 90 ;        //Aspect in firelib is N=0 and clockwise 
+        aspMap[cell]       = 360 - asp_tmp;                 //while aspect in Grass is E=0 counter-clockwise
         fuelMap[cell]  = Model;
-        slpMap[cell]   = Slope;
-        aspMap[cell]   = Aspect;
-        wspdMap[cell]  = 88. * WindSpd;     /* convert mph into ft/min */
+        wspdMap[cell]  = 196.850393701 * WindSpd;           /* convert m/s into ft/min */
         wdirMap[cell]  = WindDir;
         m1Map[cell]    = M1;
         m10Map[cell]   = M10;
@@ -120,20 +174,81 @@ int main ( int argc, char **argv )
     }
 
     /* NOTE 5: set an ignition time & pattern (this ignites the middle cell). */
-    cell = Cols/2 + Cols*(Rows/4);
-    ignMap[cell] = 1.0;
+    cell = Cols/4 + Cols*(Rows/4);
+    ignMap[cell] = 0.0;
 
     /* NOTE 6: create a standard fuel model catalog and a flame length table. */
-    catalog = Fire_FuelCatalogCreateStandard("Standard", 13);
+    ////////////////////////////////
+    //Create fuel catalog
+  
+    //Create 13 + 0 (no fuel model) standard NFFL models and creates space for 
+    //aditional custom model
+    catalog = Fire_FuelCatalogCreateStandard("Standard", 14);
+    
+    //Create aditional custom model based on NFFL1
+    //Only the PARTICLE LOAD is customized at the moment
+    if ( Fire_FuelModelCreate (
+        catalog,                                //FuelCatalogData instance
+        14,                                     //fuel model number
+        "CUSTOM",                               //Name
+        "Custom Fuel model",                    //longer description
+        0.197,                                  //bed depth (ft)
+        Fuel_Mext(catalog, 1),                  //moisture of extinction (dl)
+        Fuel_SpreadAdjustment(catalog, 1),      //spread adjustment factor (dl)
+        1) != FIRE_STATUS_OK )                  //maximum number of particles
+    {
+        fprintf(stderr, "%s\n", FuelCat_Error(catalog));
+        Fire_FuelCatalogDestroy(catalog);
+        return (NULL);
+    }
+    //Add a particle to the custom model nº 14
+    
+    if ( Fire_FuelParticleAdd (
+        catalog,                        // FuelCatalogData instance pointer
+        14,                             //Custom fuel model id
+        Fuel_Type(catalog,1,0),   
+        0.23,                    // Custom particle load              (lbs/ft2)
+        3500,                            // surface-area-to-volume ratio     (ft2/ft3)
+        Fuel_Density(catalog,1,0),      //density                          (lbs/ft3)
+        Fuel_Heat(catalog,1,0),         //heat of combustion               (btus/lb)
+        Fuel_SiTotal(catalog,1,0),      //total silica content               (lb/lb)
+        Fuel_SiEffective(catalog,1,0))  //effective silica content           (lb/lb)
+                    != FIRE_STATUS_OK )
+    {
+        fprintf(stderr, "%s\n", FuelCat_Error(catalog));
+        Fire_FuelCatalogDestroy(catalog);
+        return (NULL);
+    }
+  
+    
     Fire_FlameLengthTable(catalog, 500, 0.1);
 
     /* Calculate distance across cell to each neighbor and its azimuth. */
-    for ( n=0; n<8; n++ )
-    {
-        nDist[n] = sqrt ( nCol[n] * CellWd * nCol[n] * CellWd
-                        + nRow[n] * CellHt * nRow[n] * CellHt );
+    for ( n=0; n < 16; n++ ) {
+      nDist[n] = sqrt ( nCol[n] * CellWd * nCol[n] * CellWd
+                      + nRow[n] * CellHt * nRow[n] * CellHt );
+
+      if (n < 8)
         nAzm[n] = n * 45.;
+      else {
+
+        nAzm[n] = atanf( (nCol[n] * CellWd) / (nRow[n] * CellHt) );
+
+        if ( nCol[n] > 0  && nRow[n] < 0) //1st quadrant 
+          nAzm[n] = RadToDeg(  fabs( nAzm[n] ) );
+
+        if ( nCol[n] > 0  && nRow[n] > 0) //2st quadrant 
+          nAzm[n] = 180. - RadToDeg( nAzm[n] ) ;
+
+        if ( nCol[n] < 0  && nRow[n] > 0) //3st quadrant 
+          nAzm[n] = RadToDeg( fabs( nAzm[n] ) )+ 180.;
+
+        if ( nCol[n] < 0  && nRow[n] < 0) //4st quadrant 
+          nAzm[n] = 360. - RadToDeg( fabs( nAzm[n] ));
+      }
     }
+
+
 
     /* NOTE 7: find the earliest (starting) ignition time. */
     for ( timeNext=INFINITY, cell=0; cell<cells; cell++ )
@@ -144,7 +259,8 @@ int main ( int argc, char **argv )
 
     /* NOTE 8: loop until no more cells can ignite or fire reaches an edge. */
     atEdge = 0;
-    while ( timeNext < INFINITY && ! atEdge )
+    //while ( timeNext < INFINITY && ! atEdge )
+    while ( timeNext < INFINITY)
     {
         timeNow  = timeNext;
         timeNext = INFINITY;
@@ -181,7 +297,7 @@ int main ( int argc, char **argv )
                     wdirMap[cell], slpMap[cell], aspMap[cell]);
 
                 /* NOTE 12: examine each unignited neighbor. */
-                for ( n=0; n<8; n++ )
+                for ( n=0; n<16; n++ )
                 {
                     /* First find the neighbor's location. */
                     nrow = row + nRow[n];
@@ -220,18 +336,16 @@ int main ( int argc, char **argv )
     printf("There were %d time steps ending at %3.2f minutes (%3.2f hours).\n",
         nTimes, timeNow, timeNow/60.);
 
-    /* NOTE 13: if requested, save the ignition & flame length maps. */
-    if ( argc > 1 )
-        PrintMap(ignMap, argv[1]);
-    if ( argc > 2 )
-        PrintMap(flMap, argv[2]);
-
+    /* NOTE 13: save the ignition & flame length maps. */
+    PrintMap(aspMap,"aspect.Map");
+    PrintMap(slpMap,"slope.Map");
+    PrintMap(ignMap, "ign.Map");
+    PrintMap(flMap, "flame.Map");
+    
     return (0);
 }
 
-static int PrintMap ( map, fileName )
-    double *map;
-    char   *fileName;
+int PrintMap ( double* map, char* fileName )
 {
     FILE *fPtr;
     int cell, col, row;
@@ -242,13 +356,11 @@ static int PrintMap ( map, fileName )
         return (FIRE_STATUS_ERROR);
     }
 
-    fprintf(fPtr, "north: %1.0f\nsouth: %1.0f\neast: %1.0f\nwest: %1.0f\nrows: %d\ncols: %d\n",
-        (Rows*CellHt), 0., (Cols*CellWd), 0., Rows, Cols);
-    for ( row=Rows-1; row>=0; row-- )
+    for ( row = 0; row < Rows; row++ )
     {
         for ( cell=row*Cols, col=0; col<Cols; col++, cell++ )
         {
-            fprintf(fPtr, " %1.0f", (map[cell]==INFINITY) ? 0.0 : map[cell]);
+            fprintf(fPtr, "  %5.2f ", (map[cell]==INFINITY) ? 000.00 : map[cell]);
         }
         fprintf(fPtr, "\n");
     }

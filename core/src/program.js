@@ -15,6 +15,10 @@ and wind direction[º from north]
 
 */
 
+
+//!!!ACHTUNG - Don't Fuck with the fuel model. 
+// Choose either 'createFuelPropsCustom' or 'createFuelPropsNFFL1'
+
 module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_PC){
 
   var fireLib = require('./fireLib');
@@ -73,7 +77,7 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   var azimuthMaxMap     = new Array (ROWS*COLS);
 
   //Read file properties, build fuelProps object
-  var fuelProps = createFuelProps();
+  var fuelProps = createFuelPropsCustom();
 
   loadTerrainMaps();
 
@@ -182,7 +186,26 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
     return end - start;
   }
 
-  function createFuelProps(){
+function createFuelPropsNFFL1(){
+    var array;
+    fuelObj = {};
+
+    fuelObj.Fuel_AreaWtg = 1.00000e+00;
+    fuelObj.Fuel_LifeRxFactor =1.52283e+03;
+    fuelObj.Fuel_PropFlux = 5.77522e-02;
+    fuelObj.Fuel_Mext = 1.20000e-01;
+    fuelObj.Fuel_LifeAreaWtg = 1.00000e+00;
+    fuelObj.Fuel_SigmaFactor = 9.61339e-01 ;
+    fuelObj.Fuel_BulkDensity = 3.40000e-02 ;
+    fuelObj.Fuel_WindB = 2.07124e+00 ;
+    fuelObj.Fuel_WindK = 7.17344e-05;
+    fuelObj.Fuel_SlopeK = 4.11456e+01;
+    fuelObj.Fuel_WindE = 1.39403e+04;
+
+    return fuelObj;
+  }
+
+  function createFuelPropsCustom(){
     var array;
     fuelObj = {};
 

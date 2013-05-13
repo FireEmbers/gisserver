@@ -1,6 +1,8 @@
 /*
 
-  firelib porting to js
+  firelib porting to javascript
+
+  This should be really moved to it's own module
 
 */
 

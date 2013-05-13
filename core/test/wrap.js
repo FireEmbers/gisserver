@@ -56,9 +56,9 @@ module.exports = function(ROWS, COLS, MOISTUREPART, WINDU, WINDDIR) {
 
       //console.log(ROWS,COLS,(Date.now()-ts)/1000);
 
-      console.log(ignitionMap);      
-
-      //print2D(ignitionMap,'ignMapSlowFGMCaseAX'+ ROWS.toString()+'.csv');
+      print2D(ignitionMap,'ignMapSlowFGM'+ ROWS.toString()+'.csv');
+      print2D(slopeArray,'slope'+ ROWS.toString()+'.csv');
+      print2D(aspectArray,'aspect'+ ROWS.toString()+'.csv');
       //console.log(ignitionMap);
 
     }

@@ -7,6 +7,10 @@ CC = cc
 CFLAGS = -O2 -Wall -pedantic -DNDEBUG
 LIBS = -lm
 
+ifdef DEBUG
+CFLAGS = -g
+endif
+
 fireSim: fireSim.o fireLib.o fireLib.h
 	$(CC) $(CFLAGS) fireSim.c fireLib.c -o fireSim $(LIBS)
 
