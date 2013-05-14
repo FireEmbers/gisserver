@@ -1,3 +1,3 @@
 var wrap = require('./wrap');
 
-wrap(300,300,7,1.2,135);
+var ignMap = wrap(500,500,7,1.2,135, null, null);

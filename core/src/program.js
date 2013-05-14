@@ -24,12 +24,12 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   var fireLib = require('./fireLib');
   //var fireLib = require('./slowFGM');
 
-
   var ROWS = ROWS_PC;
   var COLS = COLS_PC;
   var MOISTUREPART = dataArray[0]/100;             //fraction
   var WINDU = dataArray[1]*196.850393701;          // [m/s] - > ft/min (2.23 m/s = 5mph)
   var WINDDIR =dataArray[2];                       //degrees clockwise from north
+
 
   var L = metersToFeet(3000);                      //Terrain Length
   var W = metersToFeet(3000);                       //Terrain Width
@@ -70,16 +70,14 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   var moistMap          = new Array (ROWS*COLS); 
   var windUMap          = new Array (ROWS*COLS); 
   var windDirMap        = new Array (ROWS*COLS); 
-  var slopeMap          = new Array (ROWS*COLS); 
-  var aspectMap         = new Array (ROWS*COLS);
+  var slopeMap          = SLOPEMAP_PC; 
+  var aspectMap         = ASPECTMAP_PC;
   var phiEffWindMap     = new Array (ROWS*COLS);
   var eccentricityMap   = new Array (ROWS*COLS);
   var azimuthMaxMap     = new Array (ROWS*COLS);
 
   //Read file properties, build fuelProps object
-  var fuelProps = createFuelPropsCustom();
-
-  loadTerrainMaps();
+  var fuelProps = createFuelPropsNFFL1();
 
   initMaps();
 
@@ -188,7 +186,7 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
 
 function createFuelPropsNFFL1(){
     var array;
-    fuelObj = {};
+    var fuelObj = {};
 
     fuelObj.Fuel_AreaWtg = 1.00000e+00;
     fuelObj.Fuel_LifeRxFactor =1.52283e+03;
@@ -207,7 +205,7 @@ function createFuelPropsNFFL1(){
 
   function createFuelPropsCustom(){
     var array;
-    fuelObj = {};
+    var fuelObj = {};
 
     fuelObj.Fuel_AreaWtg = 1.00000e+00;
     fuelObj.Fuel_LifeRxFactor =2.85775e+03;
@@ -233,11 +231,15 @@ function createFuelPropsNFFL1(){
       windUMap[cell]    = WINDU;
       windDirMap[cell]  = WINDDIR;
       //Aspect in firelib is N=0 and clockwise 
+      //while aspect in Grass is E=0 counter-clockwise
       aspectMap[cell] = (aspectMap[cell] - 90 < 0) ?                            
                           aspectMap[cell] - 90 + 360  : aspectMap[cell] - 90 ; 
+      aspectMap[cell] = 360 - aspectMap[cell];
       //while in Grass is percentage rise/reach.
+
       //Slope in firelib is a fraction
-      slopeMap[cell]    = slopeMap[cell]/100;                  
+      slopeMap[cell]    = slopeMap[cell]/100;
+
     }
 
     for (cell = 0; cell < cells; cell++)
@@ -249,15 +251,17 @@ function createFuelPropsNFFL1(){
                         windDirMap, aspectMap, azimuthMaxMap, eccentricityMap, 
                         phiEffWindMap, rxIntensityMap);
 
+
     //Ignition point at terrain midle
     ignMap[Math.floor(COLS/4) + Math.floor(ROWS/4)*COLS] = 0;
   }
 
-  function loadTerrainMaps() {
+  function loadTerrainMaps(slopeMap, aspectMap) {
 
     slopeMap = SLOPEMAP_PC;
 
     aspectMap = ASPECTMAP_PC;
+
   }
 
   function feetToMeters(x){

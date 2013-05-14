@@ -63,7 +63,7 @@ int main ( int argc, char *argv[] )
     CellHt = 3.2808399*3000/Cols;    /* Cell height (N-S) in feet. */ //1 m = 3.2808 ft 
     
     /* NOTE 2: Change these to set uniform burning conditions. */
-    size_t Model   = 14;                 /* NFFL 1 */
+    size_t Model   = 1;                 /* NFFL 1 */
     double WindSpd = atof(argv[2]);     /* m/s */
     double WindDir = atof(argv[3]);                /* degrees clockwise from north */
 

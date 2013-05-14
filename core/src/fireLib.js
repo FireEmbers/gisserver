@@ -43,26 +43,26 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
 
   var windB, windK,  phiSlope, phiWind, phiEw, upSlope, spreadMax, spreadMaxIdx;
   var spread0Idx;
-  var slope;        
+  var slope;
   var effectiveWind;
-  var maxWind;      
-  var lwRatio;      
-  var split;        
-  var x;          
-  var y;          
-  var Rv;       
+  var maxWind;
+  var lwRatio;
+  var split;
+  var x
+  var y;
+  var Rv;
   var a;
 
   slope  = slopeMap[idx];
-  spread0Idx = ros0Map[idx]; 
+  spread0Idx = ros0Map[idx];
 
   windB = fuelProps.Fuel_WindB;
   windK = fuelProps.Fuel_WindK;
-  
+
   phiSlope = fuelProps.Fuel_SlopeK*slope *slope;
   phiWind  = fuelProps.Fuel_WindK*Math.pow(windUMap[idx],windB);
-  
-  //PhiWind tem um teste < smidgen em relacao a velocidade do vento WindUMap... 
+
+  //PhiWind tem um teste < smidgen em relacao a velocidade do vento WindUMap
   phiEw = phiSlope + phiWind;
 
   if((upSlope = aspectMap[idx]) >= 180.0)
@@ -72,7 +72,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
 
 
   //Situation 1 No fire Spread or reaction Intensity
-  if(spread0Idx < smidgen) { 
+  if(spread0Idx < smidgen) {
     spreadMaxIdx          = 0;
     eccentricityMap[idx]  = 0;
     azimuthMaxMap[idx]    = 0;
@@ -82,7 +82,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
   //Situation 2 No Wind and No Slope
   else if (phiEw < smidgen) {
     phiEffWindMap[idx]   = 0;
-    spreadMaxIdx         = spread0Idx ;
+    spreadMaxIdx         = spread0Idx;
     eccentricityMap[idx] = 0;
     azimuthMaxMap[idx]   = 0;
   }
@@ -90,7 +90,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
   //Situation 3 Wind with No Slope
   else if (slope  < smidgen) {
     effectiveWind  = windUMap[idx];
-    azimuthMaxMap[idx] = windDirMap[idx];  
+    azimuthMaxMap[idx] = windDirMap[idx];
     
     maxWind = 0.9*rxIntensityMap[idx];
     spread0Idx = ros0Map[idx];
@@ -187,10 +187,10 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
 
   }
 
-  return ( spreadMaxIdx);
+  return ( spreadMaxIdx );
 }
 
-function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap, 
+function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap,
                             eccentricityMap, ros0Map )
 {
 

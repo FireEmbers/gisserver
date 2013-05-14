@@ -33,7 +33,7 @@ static double WindSpd = 1;     /* ft/min */
 static double WindDir = 0;     /* degrees clockwise from north */
 static double Slope   = 0.0;    /* fraction rise / reach */
 static double Aspect  = 100;    /* degrees clockwise from north */
-static double M1      = .05;    /* 1-hr dead fuel moisture */
+static double M1      = .07;    /* 1-hr dead fuel moisture */
 
 int main ( int argc, char **argv )
 {

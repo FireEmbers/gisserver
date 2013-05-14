@@ -7,7 +7,7 @@
 
 */
 
-var test = require('tape');
+var test = require('tap').test;
 var fs = require('fs');
 var fireLib = require('../src/fireLib');
 
@@ -51,6 +51,8 @@ test('FireLib verification', function (t) {
   t.ok(Math.abs(Ros - fireLibRos) < 1E-3, "SpreadAny ok");
   t.end();
 });
+
+
 
 
 

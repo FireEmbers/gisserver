@@ -27,6 +27,6 @@
     "grunt-contrib-jshint": "~0.4.3",
     "grunt-browserify": "~0.2.3",
     "grunt-contrib-watch": "~0.3.1",
-    "tape": "~0.3.3"
+    "tap": "~0.4.2"
   }
 }
