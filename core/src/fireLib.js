@@ -48,7 +48,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
   var maxWind;
   var lwRatio;
   var split;
-  var x
+  var x;
   var y;
   var Rv;
   var a;

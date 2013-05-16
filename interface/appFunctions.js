@@ -57,25 +57,21 @@ function launch() {
     dataArray[i][2] = windDir;
   }
 
-  //Prepare Run Function
-  RunString = Run.toString();
-
   //storage for slope (entry 0) and aspect (entry 1)
   var terrainArray = [0, 0];
 
   //Read aspect and slope files and create arrays
   //ACHTUNG Esta porra e assincrona!
-  var runnerCounter = 3;
-  arrayFromGrassFile('/InputMaps/malcataSlope_' + ROWS.toString() + '.grass', slopeCB);
-  arrayFromGrassFile('/InputMaps/malcataAspect_' + ROWS.toString() + '.grass', aspectCB);
+  var runnerCounter = 2;
+  
+  arrayFromGrassFile('InputMaps/malcataSlope_' + ROWS.toString() + '.grass', slopeCB);
+  arrayFromGrassFile('InputMaps/malcataAspect_' + ROWS.toString() + '.grass', aspectCB);
 
-  replaceRunPlaceHolders();
 
 
   function slopeCB(fileArray) {
 
     terrainArray[0] = fileArray;
-    RunString = RunString.replace(/SLOPEMAP_PC/, JSON.stringify(terrainArray[0]));
     console.log('Slope Map is loaded in string "Run"');
     launchRunner();
   }
@@ -83,7 +79,6 @@ function launch() {
   function aspectCB(fileArray) {
 
     terrainArray[1] = fileArray;
-    RunString = RunString.replace(/ASPECTMAP_PC/, JSON.stringify(terrainArray[1]));
     console.log('Aspect Map is loaded in string "Run"');
     launchRunner();
   }
@@ -104,7 +99,14 @@ function launch() {
       hidesEl('input');
       showsEl('progress');
 
-      jobs.run(RunString, 1, dataArray, onError, onProgress, onResult, onFinished);
+      function Run(dataUnit){
+
+        var core = require(1);
+
+        return core(dataUnit, ROWS, COLS, terrainArray[1], terrainArray[0]);
+      }
+
+      jobs.run(Run.toString(), 1, dataArray, onError, onProgress, onResult, onFinished);
 
       function onError(error) {
         console.error(error);
@@ -174,13 +176,7 @@ function launch() {
     });
 
   }
-
-  function replaceRunPlaceHolders() {
-
-    RunString = RunString.replace(/ROWS_PC/, ROWS);
-    RunString = RunString.replace(/COLS_PC/, COLS);
-    launchRunner();
-  } 
+ 
 
   function gauss(avg, sDev) {
 

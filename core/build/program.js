@@ -1,5 +1,4 @@
-(function(e){if("function"==typeof bootstrap)bootstrap("core",e);else if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else if("undefined"!=typeof ses){if(!ses.ok())return;ses.makeCore=e}else"undefined"!=typeof window?window.Core=e():global.Core=e()})(function(){var define,ses,bootstrap,module,exports;
-return (function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
+;(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
 
 /*
 
@@ -26,12 +25,12 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   var fireLib = require('./fireLib');
   //var fireLib = require('./slowFGM');
 
-
   var ROWS = ROWS_PC;
   var COLS = COLS_PC;
   var MOISTUREPART = dataArray[0]/100;             //fraction
   var WINDU = dataArray[1]*196.850393701;          // [m/s] - > ft/min (2.23 m/s = 5mph)
   var WINDDIR =dataArray[2];                       //degrees clockwise from north
+
 
   var L = metersToFeet(3000);                      //Terrain Length
   var W = metersToFeet(3000);                       //Terrain Width
@@ -72,16 +71,14 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   var moistMap          = new Array (ROWS*COLS); 
   var windUMap          = new Array (ROWS*COLS); 
   var windDirMap        = new Array (ROWS*COLS); 
-  var slopeMap          = new Array (ROWS*COLS); 
-  var aspectMap         = new Array (ROWS*COLS);
+  var slopeMap          = SLOPEMAP_PC; 
+  var aspectMap         = ASPECTMAP_PC;
   var phiEffWindMap     = new Array (ROWS*COLS);
   var eccentricityMap   = new Array (ROWS*COLS);
   var azimuthMaxMap     = new Array (ROWS*COLS);
 
   //Read file properties, build fuelProps object
-  var fuelProps = createFuelPropsCustom();
-
-  loadTerrainMaps();
+  var fuelProps = createFuelPropsNFFL1();
 
   initMaps();
 
@@ -190,7 +187,7 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
 
 function createFuelPropsNFFL1(){
     var array;
-    fuelObj = {};
+    var fuelObj = {};
 
     fuelObj.Fuel_AreaWtg = 1.00000e+00;
     fuelObj.Fuel_LifeRxFactor =1.52283e+03;
@@ -209,7 +206,7 @@ function createFuelPropsNFFL1(){
 
   function createFuelPropsCustom(){
     var array;
-    fuelObj = {};
+    var fuelObj = {};
 
     fuelObj.Fuel_AreaWtg = 1.00000e+00;
     fuelObj.Fuel_LifeRxFactor =2.85775e+03;
@@ -235,11 +232,15 @@ function createFuelPropsNFFL1(){
       windUMap[cell]    = WINDU;
       windDirMap[cell]  = WINDDIR;
       //Aspect in firelib is N=0 and clockwise 
+      //while aspect in Grass is E=0 counter-clockwise
       aspectMap[cell] = (aspectMap[cell] - 90 < 0) ?                            
                           aspectMap[cell] - 90 + 360  : aspectMap[cell] - 90 ; 
+      aspectMap[cell] = 360 - aspectMap[cell];
       //while in Grass is percentage rise/reach.
+
       //Slope in firelib is a fraction
-      slopeMap[cell]    = slopeMap[cell]/100;                  
+      slopeMap[cell]    = slopeMap[cell]/100;
+
     }
 
     for (cell = 0; cell < cells; cell++)
@@ -251,15 +252,17 @@ function createFuelPropsNFFL1(){
                         windDirMap, aspectMap, azimuthMaxMap, eccentricityMap, 
                         phiEffWindMap, rxIntensityMap);
 
+
     //Ignition point at terrain midle
     ignMap[Math.floor(COLS/4) + Math.floor(ROWS/4)*COLS] = 0;
   }
 
-  function loadTerrainMaps() {
+  function loadTerrainMaps(slopeMap, aspectMap) {
 
     slopeMap = SLOPEMAP_PC;
 
     aspectMap = ASPECTMAP_PC;
+
   }
 
   function feetToMeters(x){
@@ -327,26 +330,26 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
 
   var windB, windK,  phiSlope, phiWind, phiEw, upSlope, spreadMax, spreadMaxIdx;
   var spread0Idx;
-  var slope;        
+  var slope;
   var effectiveWind;
-  var maxWind;      
-  var lwRatio;      
-  var split;        
-  var x;          
-  var y;          
-  var Rv;       
+  var maxWind;
+  var lwRatio;
+  var split;
+  var x;
+  var y;
+  var Rv;
   var a;
 
   slope  = slopeMap[idx];
-  spread0Idx = ros0Map[idx]; 
+  spread0Idx = ros0Map[idx];
 
   windB = fuelProps.Fuel_WindB;
   windK = fuelProps.Fuel_WindK;
-  
+
   phiSlope = fuelProps.Fuel_SlopeK*slope *slope;
   phiWind  = fuelProps.Fuel_WindK*Math.pow(windUMap[idx],windB);
-  
-  //PhiWind tem um teste < smidgen em relacao a velocidade do vento WindUMap... 
+
+  //PhiWind tem um teste < smidgen em relacao a velocidade do vento WindUMap
   phiEw = phiSlope + phiWind;
 
   if((upSlope = aspectMap[idx]) >= 180.0)
@@ -356,7 +359,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
 
 
   //Situation 1 No fire Spread or reaction Intensity
-  if(spread0Idx < smidgen) { 
+  if(spread0Idx < smidgen) {
     spreadMaxIdx          = 0;
     eccentricityMap[idx]  = 0;
     azimuthMaxMap[idx]    = 0;
@@ -366,7 +369,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
   //Situation 2 No Wind and No Slope
   else if (phiEw < smidgen) {
     phiEffWindMap[idx]   = 0;
-    spreadMaxIdx         = spread0Idx ;
+    spreadMaxIdx         = spread0Idx;
     eccentricityMap[idx] = 0;
     azimuthMaxMap[idx]   = 0;
   }
@@ -374,7 +377,7 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
   //Situation 3 Wind with No Slope
   else if (slope  < smidgen) {
     effectiveWind  = windUMap[idx];
-    azimuthMaxMap[idx] = windDirMap[idx];  
+    azimuthMaxMap[idx] = windDirMap[idx];
     
     maxWind = 0.9*rxIntensityMap[idx];
     spread0Idx = ros0Map[idx];
@@ -471,10 +474,10 @@ function windAndSlope(idx, fuelProps, slopeMap, ros0Map, windUMap, windDirMap, a
 
   }
 
-  return ( spreadMaxIdx);
+  return ( spreadMaxIdx );
 }
 
-function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap, 
+function spreadAnyAzimuth(idx, azimuth, phiEffWindMap, azimuthMaxMap, rosMaxMap,
                             eccentricityMap, ros0Map )
 {
 
@@ -525,6 +528,5 @@ exports.windAndSlope = windAndSlope;
 exports.spreadAnyAzimuth = spreadAnyAzimuth;
 exports.noWindNoSlope = noWindNoSlope;
 
-},{}]},{},[1])(1)
-});
+},{}]},{},[1])
 ;

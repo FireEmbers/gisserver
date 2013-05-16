@@ -31,6 +31,5 @@ is created to be loaded in to the CrowdProcess API:
 
 ##Test
 
-To test shit do:
+test tings with 'test' in test folder
 
-`tape` 
