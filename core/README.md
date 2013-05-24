@@ -1,6 +1,6 @@
 #Core code for Wildfire 
 
-This module is the core function a deterministic forest fire simulator based on cellular automata
+This module is the core function for a deterministic forest fire simulator based on cellular automata
 and fireLib (Rothermel and friends).
 
 ##Usage

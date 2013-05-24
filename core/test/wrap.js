@@ -24,8 +24,8 @@ module.exports = function(ROWS, COLS, MOISTUREPART, WINDU, WINDDIR, callBack, co
   //launch FGM with real terrain, otherwise use constant terrain
   if (constTerrain === null) {
 
-    arrayFromGrassFileNode('./../../InputMaps/malcataSlope_' + ROWS.toString() + '.grass', onSlopeArray);
-    arrayFromGrassFileNode('./../../InputMaps/malcataAspect_' + ROWS.toString() + '.grass', onAspectArray);
+    arrayFromGrassFileNode('./InputMaps/malcataSlope_' + ROWS.toString() + '.grass', onSlopeArray);
+    arrayFromGrassFileNode('./InputMaps/malcataAspect_' + ROWS.toString() + '.grass', onAspectArray);
 
   }
   else{

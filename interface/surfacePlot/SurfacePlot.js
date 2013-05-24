@@ -84,7 +84,7 @@ function zColorWebGl(poly){
     var col = Math.floor(( COLS - 1)*poly.lx + ( COLS - 1)/2);
     var idx = col + ( COLS)*row;
 
-    var colourValue = (plotTime > 0 ) ? heatMap[idx1] /plotTime/2 : 0;
+    var colourValue = (plotTime > 0 ) ? heatMap[idx] /plotTime/2 : 0;
 
     return colourValue;
 }

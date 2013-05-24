@@ -60,13 +60,16 @@ function launch() {
   //storage for slope (entry 0) and aspect (entry 1)
   var terrainArray = [0, 0];
 
+  //String variable that holds program.min.js
+  var programString;
+
   //Read aspect and slope files and create arrays
   //ACHTUNG Esta porra e assincrona!
-  var runnerCounter = 2;
+  var runnerCounter = 3;
   
   arrayFromGrassFile('InputMaps/malcataSlope_' + ROWS.toString() + '.grass', slopeCB);
   arrayFromGrassFile('InputMaps/malcataAspect_' + ROWS.toString() + '.grass', aspectCB);
-
+  stringToFile('program.min.js', function(string){ programString = string; launchRunner();});
 
 
   function slopeCB(fileArray) {
@@ -99,14 +102,27 @@ function launch() {
       hidesEl('input');
       showsEl('progress');
 
-      function Run(dataUnit){
+      function RunString(){
 
-        var core = require(1);
+        function Run(dataUnit){ 
+          
+          var core = require(1);  
 
-        return core(dataUnit, ROWS, COLS, terrainArray[1], terrainArray[0]);
+          return core(dataUnit, ROWS, COLS, terrainArray[1], terrainArray[0]);
+        }
+
+        var string = Run.toString() + ';' + programString + 
+        'var ROWS =' + ROWS.toString() + ';' + 
+        'var COLS =' + COLS.toString() + ';' + 
+        'var terrainArray = [];' + 
+        'terrainArray[0] =' + JSON.stringify(terrainArray[0]) + ';' + 
+        'terrainArray[1] =' + JSON.stringify(terrainArray[1]) + ';';
+
+        return string;
+
       }
 
-      jobs.run(Run.toString(), 1, dataArray, onError, onProgress, onResult, onFinished);
+      jobs.run(RunString(), 1, dataArray, onError, onProgress, onResult, onFinished);
 
       function onError(error) {
         console.error(error);
@@ -117,9 +133,7 @@ function launch() {
         progressbar.progressbar("value", progress);
       }
 
-      function onResult(err, result) {
-
-        if (err) console.log(err);
+      function onResult(result) {
 
         resultsArray[resultsIdx] = JSON.parse(result);
 
@@ -483,6 +497,32 @@ function arrayFromGrassFile(fileName, cb) {
       cb(array);
     }
 }
+
+function stringToFile(fileName, cb) {
+
+    /*
+      reads file, uses string in callback
+
+    */
+
+    var req = new XMLHttpRequest();
+
+    req.onreadystatechange = onreadystatechange;
+
+    req.open('GET', fileName);
+
+    req.send();
+
+    function onreadystatechange() {
+
+      if (req.readyState !== 4)
+        return;
+
+      cb(req.responseText);
+
+    }
+}
+
 
 function readGrassFile(data) {
 

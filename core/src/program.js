@@ -70,14 +70,15 @@ module.exports = function (dataArray, ROWS_PC, COLS_PC, ASPECTMAP_PC, SLOPEMAP_P
   var moistMap          = new Array (ROWS*COLS); 
   var windUMap          = new Array (ROWS*COLS); 
   var windDirMap        = new Array (ROWS*COLS); 
-  var slopeMap          = SLOPEMAP_PC; 
-  var aspectMap         = ASPECTMAP_PC;
+  var slopeMap          = new Array (ROWS*COLS);
+  var aspectMap         = new Array (ROWS*COLS);
   var phiEffWindMap     = new Array (ROWS*COLS);
   var eccentricityMap   = new Array (ROWS*COLS);
   var azimuthMaxMap     = new Array (ROWS*COLS);
 
   //Read file properties, build fuelProps object
   var fuelProps = createFuelPropsNFFL1();
+
 
   initMaps();
 
@@ -232,13 +233,13 @@ function createFuelPropsNFFL1(){
       windDirMap[cell]  = WINDDIR;
       //Aspect in firelib is N=0 and clockwise 
       //while aspect in Grass is E=0 counter-clockwise
-      aspectMap[cell] = (aspectMap[cell] - 90 < 0) ?                            
-                          aspectMap[cell] - 90 + 360  : aspectMap[cell] - 90 ; 
+      aspectMap[cell] = (ASPECTMAP_PC[cell] - 90 < 0) ?                            
+                          ASPECTMAP_PC[cell] - 90 + 360  : ASPECTMAP_PC[cell] - 90 ; 
       aspectMap[cell] = 360 - aspectMap[cell];
       //while in Grass is percentage rise/reach.
 
       //Slope in firelib is a fraction
-      slopeMap[cell]    = slopeMap[cell]/100;
+      slopeMap[cell]    = SLOPEMAP_PC[cell]/100;
 
     }
 
@@ -254,14 +255,6 @@ function createFuelPropsNFFL1(){
 
     //Ignition point at terrain midle
     ignMap[Math.floor(COLS/4) + Math.floor(ROWS/4)*COLS] = 0;
-  }
-
-  function loadTerrainMaps(slopeMap, aspectMap) {
-
-    slopeMap = SLOPEMAP_PC;
-
-    aspectMap = ASPECTMAP_PC;
-
   }
 
   function feetToMeters(x){
