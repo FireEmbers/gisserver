@@ -5,7 +5,7 @@ var ROWS = 100;
 var COLS = 100;
 
 
-var ignMap = wrap(ROWS,COLS,7,1.2,135, printMap, null);
+var ignMap = wrap(ROWS,COLS,4,0.5,135, printMap, null);
 
 function printMap(ignitionMap){
 
