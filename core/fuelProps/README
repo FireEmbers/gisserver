@@ -1,5 +1,0 @@
-Shameless fuel properties porting. One day, these functions will be ported to JS. 
-
-Fuel properties are computed with firelib-C functions and the results are returned
-in a file, which will be later read by the javascript.
-

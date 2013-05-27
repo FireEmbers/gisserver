@@ -1,3 +1,0 @@
-#Wildfire
-
-##Stochastic fire simulator 
