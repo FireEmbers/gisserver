@@ -10,6 +10,6 @@
   "author": "",
   "license": "BSD",
   "dependencies": {
-    "pg": "~1.1.1"
+    "pg": "~1.1.2"
   }
 }
