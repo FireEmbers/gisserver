@@ -13,7 +13,7 @@ The output is a matrix where each element corresponds to a specific category of 
 
 `getCorine( N, S, E, W, rows, cols, functions(data){ fuelMap = data });`
 
-* N, S, E, W are the limiting coordinates of the rectangular clip area (string format). eg: `var W = 2660547; var E = 2666430; var N = 1954031; var S = 1948355;`
+* N, S, E, W are the limiting coordinates of the rectangular area, in a string format. eg: `var W = 2660547; var E = 2666430; var N = 1954031; var S = 1948355;`
 
 * rows and cols are the resolution of the map
 
@@ -21,7 +21,7 @@ The output is a matrix where each element corresponds to a specific category of 
 
 ##Output example
 
-fuelMap = [111,111,311,111,...];
+data = [111,111,311,111,...];
 
 111 - Continuous urban fabric
 
