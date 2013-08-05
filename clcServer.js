@@ -85,6 +85,7 @@ function getPointString(XX,YY){
 
 function rasterLayer(client, XX, YY, layer, cb){
 
+
   //set variables
   client.query('set search_path to "$user", "public", "gis_schema";');
 

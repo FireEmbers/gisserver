@@ -2,3 +2,4 @@ node_modules
 build/*
 *.sublime_project
 *.sublime_workspace
+*.map

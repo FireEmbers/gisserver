@@ -8,20 +8,10 @@
 
 var test = require('tap').test;
 
-var getCorine = require('../gisserver');
+var getCorine = require('../clcServer');
 
 var write2D = require('../../utils/write2D');
 
-var rows1 = 50;
-var cols1 = 40;
-
-var cols2 = 50;
-var rows2 = 50;
-
-var W = 2656127; 
-var E = 2661391;
-var N = 1954572;
-var S = 1949573;
 
 function fileToArraySync(filename, cells){
 
@@ -58,7 +48,18 @@ function Res(mapA, mapB, Rows, Cols){
   return res;
 }
 
-test('Test', function (t) {
+test('Test clcServer', function (t) {
+
+  var rows1 = 50;
+  var cols1 = 40;
+
+  var cols2 = 50;
+  var rows2 = 50;
+
+  var W = 2656127; 
+  var E = 2661391;
+  var N = 1954572;
+  var S = 1949573;
 
   validMaps = {};
 
