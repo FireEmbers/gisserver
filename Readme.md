@@ -19,6 +19,7 @@ The SRTM module queries a database where the height data in WGS84 is stored, ret
 
 * N, S, E, W are the limiting coordinates of the rectangular clip area (string format, Easting/Northing). eg: `var W = 2660547; var E = 2666430; var N = 1954031; var S = 1948355;`
 
+
 * rows and cols are the resolution of the map
 
 * The fuelMap is used in the call back function and it's in CLC format. 
@@ -38,7 +39,7 @@ The SRTM module queries a database where the height data in WGS84 is stored, ret
 
 ## CLC Output example
 
-fuelMap = [111,111,311,111,...];
+data = [111,111,311,111,...];
 
 111 - Continuous urban fabric
 
