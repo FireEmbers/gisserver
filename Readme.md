@@ -49,6 +49,7 @@ data = [111,111,311,111,...];
 
 ## SRTM Output example
 
+```
 { command: 'SELECT',
   rowCount: 625,
   oid: NaN,
@@ -58,6 +59,7 @@ data = [111,111,311,111,...];
      { x: 1, y: 2, height: 1004 },
      { x: 1, y: 3, height: 111 },
      ...                          ] }
+```
 
 st_metadata contains information about the clipped raster. It's important to notice that, because of the way the clipping area intersects the raster pixels, the values for E/N of the clipped area will be slightly different from the input E/N at `getSRTM`.
 
