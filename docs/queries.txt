@@ -1,0 +1,298 @@
+create table pt_table_clc06_c111 as select a.* from clc06_c111 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c112 as select a.* from clc06_c112 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c121 as select a.* from clc06_c121 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c122 as select a.* from clc06_c122 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c123 as select a.* from clc06_c123 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c124 as select a.* from clc06_c124 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c131 as select a.* from clc06_c131 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c132 as select a.* from clc06_c132 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c133 as select a.* from clc06_c133 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c141 as select a.* from clc06_c141 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c142 as select a.* from clc06_c142 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c211 as select a.* from clc06_c211 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c212 as select a.* from clc06_c212 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c213 as select a.* from clc06_c213 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c221 as select a.* from clc06_c221 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c222 as select a.* from clc06_c222 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c223 as select a.* from clc06_c223 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c231 as select a.* from clc06_c231 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c241 as select a.* from clc06_c241 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c242 as select a.* from clc06_c242 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c243 as select a.* from clc06_c243 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c244 as select a.* from clc06_c244 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c311 as select a.* from clc06_c311 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c312 as select a.* from clc06_c312 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c313 as select a.* from clc06_c313 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c321 as select a.* from clc06_c321 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c322 as select a.* from clc06_c322 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c323 as select a.* from clc06_c323 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c324 as select a.* from clc06_c324 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c331 as select a.* from clc06_c331 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c332 as select a.* from clc06_c332 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c333 as select a.* from clc06_c333 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c334 as select a.* from clc06_c334 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c335 as select a.* from clc06_c335 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c411 as select a.* from clc06_c411 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c412 as select a.* from clc06_c412 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c421 as select a.* from clc06_c421 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c422 as select a.* from clc06_c422 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c423 as select a.* from clc06_c423 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c511 as select a.* from clc06_c511 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c512 as select a.* from clc06_c512 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c521 as select a.* from clc06_c521 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c522 as select a.* from clc06_c522 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+create table pt_table_clc06_c523 as select a.* from clc06_c523 as a, portugalcontlaea as b where ST_Contains(b.the_geom, a.the_geom);
+
+CREATE INDEX pt_table_clc06_c111_gist ON pt_table_clc06_c111 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c112_gist ON pt_table_clc06_c112 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c121_gist ON pt_table_clc06_c121 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c122_gist ON pt_table_clc06_c122 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c123_gist ON pt_table_clc06_c123 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c124_gist ON pt_table_clc06_c124 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c131_gist ON pt_table_clc06_c131 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c132_gist ON pt_table_clc06_c132 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c133_gist ON pt_table_clc06_c133 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c141_gist ON pt_table_clc06_c141 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c142_gist ON pt_table_clc06_c142 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c211_gist ON pt_table_clc06_c211 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c212_gist ON pt_table_clc06_c212 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c213_gist ON pt_table_clc06_c213 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c221_gist ON pt_table_clc06_c221 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c222_gist ON pt_table_clc06_c222 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c223_gist ON pt_table_clc06_c223 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c231_gist ON pt_table_clc06_c231 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c241_gist ON pt_table_clc06_c241 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c242_gist ON pt_table_clc06_c242 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c243_gist ON pt_table_clc06_c243 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c244_gist ON pt_table_clc06_c244 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c311_gist ON pt_table_clc06_c311 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c312_gist ON pt_table_clc06_c312 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c313_gist ON pt_table_clc06_c313 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c321_gist ON pt_table_clc06_c321 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c322_gist ON pt_table_clc06_c322 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c323_gist ON pt_table_clc06_c323 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c324_gist ON pt_table_clc06_c324 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c331_gist ON pt_table_clc06_c331 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c332_gist ON pt_table_clc06_c332 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c333_gist ON pt_table_clc06_c333 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c334_gist ON pt_table_clc06_c334 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c335_gist ON pt_table_clc06_c335 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c411_gist ON pt_table_clc06_c411 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c412_gist ON pt_table_clc06_c412 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c421_gist ON pt_table_clc06_c421 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c422_gist ON pt_table_clc06_c422 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c423_gist ON pt_table_clc06_c423 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c511_gist ON pt_table_clc06_c511 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c512_gist ON pt_table_clc06_c512 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c521_gist ON pt_table_clc06_c521 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c522_gist ON pt_table_clc06_c522 USING GIST (the_geom);
+CREATE INDEX pt_table_clc06_c523_gist ON pt_table_clc06_c523 USING GIST (the_geom);
+
+CLUSTER pt_table_clc06_c111 USING pt_table_clc06_c111_gist;
+CLUSTER pt_table_clc06_c112 USING pt_table_clc06_c112_gist;
+CLUSTER pt_table_clc06_c121 USING pt_table_clc06_c121_gist;
+CLUSTER pt_table_clc06_c122 USING pt_table_clc06_c122_gist;
+CLUSTER pt_table_clc06_c123 USING pt_table_clc06_c123_gist;
+CLUSTER pt_table_clc06_c124 USING pt_table_clc06_c124_gist;
+CLUSTER pt_table_clc06_c131 USING pt_table_clc06_c131_gist;
+CLUSTER pt_table_clc06_c132 USING pt_table_clc06_c132_gist;
+CLUSTER pt_table_clc06_c133 USING pt_table_clc06_c133_gist;
+CLUSTER pt_table_clc06_c141 USING pt_table_clc06_c141_gist;
+CLUSTER pt_table_clc06_c142 USING pt_table_clc06_c142_gist;
+CLUSTER pt_table_clc06_c211 USING pt_table_clc06_c211_gist;
+CLUSTER pt_table_clc06_c212 USING pt_table_clc06_c212_gist;
+CLUSTER pt_table_clc06_c213 USING pt_table_clc06_c213_gist;
+CLUSTER pt_table_clc06_c221 USING pt_table_clc06_c221_gist;
+CLUSTER pt_table_clc06_c222 USING pt_table_clc06_c222_gist;
+CLUSTER pt_table_clc06_c223 USING pt_table_clc06_c223_gist;
+CLUSTER pt_table_clc06_c231 USING pt_table_clc06_c231_gist;
+CLUSTER pt_table_clc06_c241 USING pt_table_clc06_c241_gist;
+CLUSTER pt_table_clc06_c242 USING pt_table_clc06_c242_gist;
+CLUSTER pt_table_clc06_c243 USING pt_table_clc06_c243_gist;
+CLUSTER pt_table_clc06_c244 USING pt_table_clc06_c244_gist;
+CLUSTER pt_table_clc06_c311 USING pt_table_clc06_c311_gist;
+CLUSTER pt_table_clc06_c312 USING pt_table_clc06_c312_gist;
+CLUSTER pt_table_clc06_c313 USING pt_table_clc06_c313_gist;
+CLUSTER pt_table_clc06_c321 USING pt_table_clc06_c321_gist;
+CLUSTER pt_table_clc06_c322 USING pt_table_clc06_c322_gist;
+CLUSTER pt_table_clc06_c323 USING pt_table_clc06_c323_gist;
+CLUSTER pt_table_clc06_c324 USING pt_table_clc06_c324_gist;
+CLUSTER pt_table_clc06_c331 USING pt_table_clc06_c331_gist;
+CLUSTER pt_table_clc06_c332 USING pt_table_clc06_c332_gist;
+CLUSTER pt_table_clc06_c333 USING pt_table_clc06_c333_gist;
+CLUSTER pt_table_clc06_c334 USING pt_table_clc06_c334_gist;
+CLUSTER pt_table_clc06_c335 USING pt_table_clc06_c335_gist;
+CLUSTER pt_table_clc06_c411 USING pt_table_clc06_c411_gist;
+CLUSTER pt_table_clc06_c412 USING pt_table_clc06_c412_gist;
+CLUSTER pt_table_clc06_c421 USING pt_table_clc06_c421_gist;
+CLUSTER pt_table_clc06_c422 USING pt_table_clc06_c422_gist;
+CLUSTER pt_table_clc06_c423 USING pt_table_clc06_c423_gist;
+CLUSTER pt_table_clc06_c511 USING pt_table_clc06_c511_gist;
+CLUSTER pt_table_clc06_c512 USING pt_table_clc06_c512_gist;
+CLUSTER pt_table_clc06_c521 USING pt_table_clc06_c521_gist;
+CLUSTER pt_table_clc06_c522 USING pt_table_clc06_c522_gist;
+CLUSTER pt_table_clc06_c523 USING pt_table_clc06_c523_gist;
+
+
+VACUUM ANALYZE pt_table_clc06_c111;
+VACUUM ANALYZE pt_table_clc06_c112;
+VACUUM ANALYZE pt_table_clc06_c121;
+VACUUM ANALYZE pt_table_clc06_c122;
+VACUUM ANALYZE pt_table_clc06_c123;
+VACUUM ANALYZE pt_table_clc06_c124;
+VACUUM ANALYZE pt_table_clc06_c131;
+VACUUM ANALYZE pt_table_clc06_c132;
+VACUUM ANALYZE pt_table_clc06_c133;
+VACUUM ANALYZE pt_table_clc06_c141;
+VACUUM ANALYZE pt_table_clc06_c142;
+VACUUM ANALYZE pt_table_clc06_c211;
+VACUUM ANALYZE pt_table_clc06_c212;
+VACUUM ANALYZE pt_table_clc06_c213;
+VACUUM ANALYZE pt_table_clc06_c221;
+VACUUM ANALYZE pt_table_clc06_c222;
+VACUUM ANALYZE pt_table_clc06_c223;
+VACUUM ANALYZE pt_table_clc06_c231;
+VACUUM ANALYZE pt_table_clc06_c241;
+VACUUM ANALYZE pt_table_clc06_c242;
+VACUUM ANALYZE pt_table_clc06_c243;
+VACUUM ANALYZE pt_table_clc06_c244;
+VACUUM ANALYZE pt_table_clc06_c311;
+VACUUM ANALYZE pt_table_clc06_c312;
+VACUUM ANALYZE pt_table_clc06_c313;
+VACUUM ANALYZE pt_table_clc06_c321;
+VACUUM ANALYZE pt_table_clc06_c322;
+VACUUM ANALYZE pt_table_clc06_c323;
+VACUUM ANALYZE pt_table_clc06_c324;
+VACUUM ANALYZE pt_table_clc06_c331;
+VACUUM ANALYZE pt_table_clc06_c332;
+VACUUM ANALYZE pt_table_clc06_c333;
+VACUUM ANALYZE pt_table_clc06_c334;
+VACUUM ANALYZE pt_table_clc06_c335;
+VACUUM ANALYZE pt_table_clc06_c411;
+VACUUM ANALYZE pt_table_clc06_c412;
+VACUUM ANALYZE pt_table_clc06_c421;
+VACUUM ANALYZE pt_table_clc06_c422;
+VACUUM ANALYZE pt_table_clc06_c423;
+VACUUM ANALYZE pt_table_clc06_c511;
+VACUUM ANALYZE pt_table_clc06_c512;
+VACUUM ANALYZE pt_table_clc06_c521;
+VACUUM ANALYZE pt_table_clc06_c522;
+VACUUM ANALYZE pt_table_clc06_c523;
+
+CREATE TABLE merged_CLC2006_ AS( 
+SELECT * FROM pt_table_clc06_c111
+UNION
+SELECT * FROM pt_table_clc06_c112
+UNION
+SELECT * FROM pt_table_clc06_c121
+UNION
+SELECT * FROM pt_table_clc06_c122
+UNION
+SELECT * FROM pt_table_clc06_c123
+UNION
+SELECT * FROM pt_table_clc06_c124
+UNION
+SELECT * FROM pt_table_clc06_c131
+UNION
+SELECT * FROM pt_table_clc06_c132
+UNION
+SELECT * FROM pt_table_clc06_c133
+UNION
+SELECT * FROM pt_table_clc06_c141
+UNION
+SELECT * FROM pt_table_clc06_c142
+UNION
+SELECT * FROM pt_table_clc06_c211
+UNION
+SELECT * FROM pt_table_clc06_c212
+UNION
+SELECT * FROM pt_table_clc06_c213
+UNION
+SELECT * FROM pt_table_clc06_c221
+UNION
+SELECT * FROM pt_table_clc06_c222
+UNION
+SELECT * FROM pt_table_clc06_c223
+UNION
+SELECT * FROM pt_table_clc06_c231
+UNION
+SELECT * FROM pt_table_clc06_c241
+UNION
+SELECT * FROM pt_table_clc06_c242
+UNION
+SELECT * FROM pt_table_clc06_c243
+UNION
+SELECT * FROM pt_table_clc06_c244
+UNION
+SELECT * FROM pt_table_clc06_c311
+UNION
+SELECT * FROM pt_table_clc06_c312
+UNION
+SELECT * FROM pt_table_clc06_c313
+UNION
+SELECT * FROM pt_table_clc06_c321
+UNION
+SELECT * FROM pt_table_clc06_c322
+UNION
+SELECT * FROM pt_table_clc06_c323
+UNION
+SELECT * FROM pt_table_clc06_c324
+UNION
+SELECT * FROM pt_table_clc06_c331
+UNION
+SELECT * FROM pt_table_clc06_c332
+UNION
+SELECT * FROM pt_table_clc06_c333
+UNION
+SELECT * FROM pt_table_clc06_c334
+UNION
+SELECT * FROM pt_table_clc06_c335
+UNION
+SELECT * FROM pt_table_clc06_c411
+UNION
+SELECT * FROM pt_table_clc06_c412
+UNION
+SELECT * FROM pt_table_clc06_c421
+UNION
+SELECT * FROM pt_table_clc06_c422
+UNION
+SELECT * FROM pt_table_clc06_c423
+UNION
+SELECT * FROM pt_table_clc06_c511
+UNION
+SELECT * FROM pt_table_clc06_c512
+UNION
+SELECT * FROM pt_table_clc06_c521
+UNION
+SELECT * FROM pt_table_clc06_c522
+UNION
+SELECT * FROM pt_table_clc06_c523
+);
+SELECT Populate_Geometry_Columns('merged_CLC2006_'::regclass);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

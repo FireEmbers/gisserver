@@ -1,6 +1,5 @@
-var getCorine = require('./clcServer');
-var testDB = require('./newClcServer');
-var getSrtm = require('./srtmServer');
+var getCorine = require('./src/clcServer');
+//var getSrtm = require('./src/srtmServer');
 var write2D = require('../utils/write2D');
 var cconv= require('cconv');
 
@@ -27,8 +26,8 @@ console.log('var N = ',N+';');
 console.log('var S = ',S+';');
 
 
-var rows = 50;
-var cols = 50;
+var rows = 100;
+var cols = 100;
 
 console.log('map length:', E-W);
 console.log('map height:', N-S);
