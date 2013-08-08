@@ -273,9 +273,52 @@ SELECT Populate_Geometry_Columns('merged_CLC2006_'::regclass);
 
 
 
+drop view _c111;
 
-
-
+drop view pt_clc06_c111;
+drop view pt_clc06_c112;
+drop view pt_clc06_c121;
+drop view pt_clc06_c122;
+drop view pt_clc06_c123;
+drop view pt_clc06_c124;
+drop view pt_clc06_c131;
+drop view pt_clc06_c132;
+drop view pt_clc06_c133;
+drop view pt_clc06_c141;
+drop view pt_clc06_c142;
+drop view pt_clc06_c211;
+drop view pt_clc06_c212;
+drop view pt_clc06_c213;
+drop view pt_clc06_c221;
+drop view pt_clc06_c222;
+drop view pt_clc06_c223;
+drop view pt_clc06_c231;
+drop view pt_clc06_c241;
+drop view pt_clc06_c242;
+drop view pt_clc06_c243;
+drop view pt_clc06_c244;
+drop view pt_clc06_c311;
+drop view pt_clc06_c312;
+drop view pt_clc06_c313;
+drop view pt_clc06_c321;
+drop view pt_clc06_c322;
+drop view pt_clc06_c323;
+drop view pt_clc06_c324;
+drop view pt_clc06_c331;
+drop view pt_clc06_c332;
+drop view pt_clc06_c333;
+drop view pt_clc06_c334;
+drop view pt_clc06_c335;
+drop view pt_clc06_c411;
+drop view pt_clc06_c412;
+drop view pt_clc06_c421;
+drop view pt_clc06_c422;
+drop view pt_clc06_c423;
+drop view pt_clc06_c511;
+drop view pt_clc06_c512;
+drop view pt_clc06_c521;
+drop view pt_clc06_c522;
+drop view pt_clc06_c523;
 
 
 
