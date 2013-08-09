@@ -2,13 +2,14 @@
 //there's only data available for portugal cont.
 
 var pg = require('pg');
-  var config = {
-    user: 'fsousa',
-    password: null,
-    host: '/var/run/postgresql',
-    database: 'gisdb',
-    port: '5433'
-  };
+
+var config = {
+  user: 'fsousa',
+  password: null,
+  host: '/var/run/postgresql',
+  database: 'gisdb',
+  port: '5433'
+};
 
 function Rendezvous(count, cb) {
   return function() {
@@ -22,7 +23,7 @@ module.exports = function( N, S, E, W, rows, cols, cb){
   var width = parseFloat(E) - parseFloat(W);
   var height = parseFloat(N) - parseFloat(S);
 
-  var client = new pg.config(Client);
+  var client = new pg.Client(config);
 
   client.connect();
 
