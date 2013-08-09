@@ -1,6 +1,6 @@
 var getCorine = require('./src/clcServer');
 //var getSrtm = require('./src/srtmServer');
-var write2D = require('../utils/write2D');
+var write2D = require('utils').write2D;
 var cconv= require('cconv');
 
 var sridA = 4258;

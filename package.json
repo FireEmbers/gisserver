@@ -1,15 +1,29 @@
 {
-  "name": "postgresStuff",
-  "version": "0.0.0",
+  "name": "emberspgs",
+  "version": "0.1.0",
   "description": "ERROR: No README.md file found!",
   "main": "connection.js",
   "scripts": {
     "test": "tap test/testCorine.js"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/FireEmbers/gisserver.git"
+  },
   "author": "",
-  "license": "BSD",
+  "license": "MIT",
   "dependencies": {
-    "pg": "~1.1.2"
+    "pg": "~1.1.3",
+    "cconv": "~0.1.0",
+    "utils": "git+ssh://git@github.com:FireEmbers/utils.git"
+  },
+  "readmeFilename": "Readme.md",
+  "gitHead": "c9eb4524f7c2b57a06f9a6b0c445cae406f1d40f",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "devDependencies": {
+    "tap": "~0.4.3"
   }
 }
