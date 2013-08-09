@@ -6,7 +6,8 @@ var pg = require('pg');
     user: 'fsousa',
     password: null,
     host: '/var/run/postgresql',
-    database: 'gisdb'
+    database: 'gisdb',
+    port: '5433'
   };
 
 function Rendezvous(count, cb) {
@@ -21,7 +22,7 @@ module.exports = function( N, S, E, W, rows, cols, cb){
   var width = parseFloat(E) - parseFloat(W);
   var height = parseFloat(N) - parseFloat(S);
 
-  var client = new pg.Client(config);
+  var client = new pg.config(Client);
 
   client.connect();
 
