@@ -64,6 +64,10 @@ data = [111,111,311,111,...];
 st_metadata contains information about the clipped raster. It's important to notice that, because of the way the clipping area intersects the raster pixels, the values for E/N of the clipped area will be slightly different from the input E/N at `getSRTM`.
 
 
+##expressAPP
+
+needs documentation and tests
+
 ##To do
 
 srtm server output needs to be tested

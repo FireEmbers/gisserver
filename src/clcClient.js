@@ -8,7 +8,7 @@ var config = {
   password: null,
   host: '/var/run/postgresql',
   database: 'gisdb',
-  port: '5433'
+  port: '5432'
 };
 
 function Rendezvous(count, cb) {
