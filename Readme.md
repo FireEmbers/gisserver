@@ -1,8 +1,9 @@
 #PostGis CLC and SRTM server 
 
 Currently, only Corine Land Cover (CLC) data is being served. We have an express app 
-using the postGis CLC client (see Usage> CLC modules), receiving arguments in the request body and sending the CLC array in with the response.send method. 
-
+using the postGis CLC client (see Usage> CLC modules), receiving arguments in the request body and sending the CLC array in with the response.send method. See
+[expressApp.js](https://github.com/FireEmbers/gisserver/blob/master/expressApp.js)
+ 
 ##modules in /src 
 
 These modules contain query scripts for Corine Land Cover (CLC) and SRTM height data access.
