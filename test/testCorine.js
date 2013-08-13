@@ -8,7 +8,7 @@
 
 var test = require('tap').test;
 
-var getCorine = require('../src/clcServer');
+var getCorine = require('../src/clcClient');
 
 var write2D = require('embersutils').write2D;
 

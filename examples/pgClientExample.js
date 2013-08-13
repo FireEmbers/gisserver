@@ -1,4 +1,4 @@
-var getCorine = require('./src/clcServer');
+var getCorine = require('./../src/clcClient');
 //var getSrtm = require('./src/srtmServer');
 var write2D = require('embersutils').write2D;
 var cconv= require('cconv');
@@ -34,24 +34,6 @@ console.log('map height:', N-S);
 
 console.log(N,S,E,W);
 
-
-// getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows, cols, function(data){ 
-
-
-
-//   // for (var n = 0; n<data.length; n++){
-//   //   if ( !(/\b3\d\d\b/.test(data[n])) ) data[n] = 0;
-//   // }
-
-//   // write2D (data, rows, cols, 'terrainsmall.map') }
-
-
-//     console.log(data, N, S, E, W, rows, cols);
-//   }
-
-// );
-
-
 getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows, cols, function(data){ 
 
   for (var n = 0; n<data.length; n++){
@@ -61,13 +43,3 @@ getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows, cols, f
   write2D (data, rows, cols, 'terrainsmall.map') }
 
 );
-
-
-
-// getSrtm( N.toString(), S.toString(), E.toString(), W.toString(), function(data){ 
-
-//   console.log(data);
-  
-//   //write2D (data, rows, cols, 'height.map'); 
-
-// });
