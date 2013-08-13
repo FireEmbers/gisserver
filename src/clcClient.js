@@ -25,7 +25,10 @@ module.exports = function( N, S, E, W, rows, cols, cb){
 
   var client = new pg.Client(config);
 
-  client.connect();
+  client.connect(function(err) {
+    if(err) {
+      return console.error('could not connect to postgres', err);
+  }});
 
   //set variables
   client.query('set search_path to "$user", "public", "gis_schema";');
