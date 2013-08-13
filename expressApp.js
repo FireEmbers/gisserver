@@ -7,7 +7,7 @@ app.configure(function(){
   app.use(express.bodyParser());
 });
 
-app.post('/ReceiveJSON', function(req, res){
+app.post('/postgisData', function(req, res){
 
   var N = req.body.north;
   var S = req.body.south;
