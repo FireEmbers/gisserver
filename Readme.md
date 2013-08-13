@@ -1,6 +1,11 @@
 #PostGis CLC and SRTM server 
 
-Query scripts for Corine Land Cover (CLC) and SRTM height data access.
+Currently, only Corine Land Cover (CLC) data is being served. We have an express app 
+using the postGis CLC client (see Usage> CLC modules), receiving arguments in the request body and sending the CLC array in with the response.send method. 
+
+##modules in /src 
+
+These modules contain query scripts for Corine Land Cover (CLC) and SRTM height data access.
 
 The idea is to get a rectangular area from the CLC layers stored in postgis and use that data to feed the fuel models of fireLib. 
 
@@ -13,7 +18,7 @@ The SRTM module queries a database where the height data in WGS84 is stored, ret
 
 ### CLC module
 
-`var getCorine = require('clcServer');`
+`var getCorine = require('clcClient');`
 
 `getCorine( N, S, E, W, rows, cols, functions(data){ fuelMap = data });`
 
@@ -26,7 +31,7 @@ The SRTM module queries a database where the height data in WGS84 is stored, ret
 
 ###SRTM module
 
-`var getSrtm = require('srtmServer');`
+`var getSrtm = require('srtmClient');`
 
 `getSrtm( N, S, E, W, functions(data){ heightMap = data });`
 
@@ -64,10 +69,9 @@ data = [111,111,311,111,...];
 st_metadata contains information about the clipped raster. It's important to notice that, because of the way the clipping area intersects the raster pixels, the values for E/N of the clipped area will be slightly different from the input E/N at `getSRTM`.
 
 
-##expressAPP
-
-needs documentation and tests
-
 ##To do
 
-srtm server output needs to be tested
+* srtm modules needs tests
+* express app needs tests
+
+
