@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var clcClient = require('./src/clcClient');
 
 var express = require('express');
@@ -7,7 +9,7 @@ app.configure(function(){
   app.use(express.bodyParser());
 });
 
-app.post('/postgisData', function(req, res){
+app.post('/postgisdata', function(req, res){
 
   var N = req.body.north;
   var S = req.body.south;

@@ -2,7 +2,8 @@
   "name": "emberspgs",
   "version": "0.1.0",
   "description": "ERROR: No README.md file found!",
-  "main": "connection.js",
+  "main": "postgisServer.js",
+  "bin": "postgisServer.js",
   "scripts": {
     "test": "tap test/testCorine.js"
   },
