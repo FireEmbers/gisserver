@@ -5,7 +5,7 @@
   A query clips a certain terrain area and compares it to a hopefully equal stored array
 
 */
-
+var path = require('path');
 var test = require('tap').test;
 
 var getCorine = require('../src/clcClient');
@@ -19,7 +19,7 @@ function fileToArraySync(filename, cells){
 
   var array = Array(cells);
 
-  var data = fs.readFileSync(filename,'utf8');
+  var data = fs.readFileSync(path.join(__dirname, filename),'utf8');
 
   var mapString = data.match(/[\d.]+/g);
 
@@ -48,7 +48,7 @@ function Res(mapA, mapB, Rows, Cols){
   return res;
 }
 
-test('Test clcServer', function (t) {
+test('Testing clcClient', function (t) {
 
   var rows1 = 50;
   var cols1 = 40;

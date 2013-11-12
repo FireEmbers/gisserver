@@ -2,6 +2,7 @@ var getCorine = require('./../src/clcClient');
 //var getSrtm = require('./src/srtmServer');
 var write2D = require('embersutils').write2D;
 var cconv= require('cconv');
+var path = require('path')
 
 var sridA = 4258;
 var sridB = 3035;
@@ -32,7 +33,7 @@ var cols = 100;
 console.log('map length:', E-W);
 console.log('map height:', N-S);
 
-console.log(N,S,E,W);
+console.log('Bounding Box:\n', N,S,E,W);
 
 getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows, cols, function(data){ 
 
@@ -40,6 +41,6 @@ getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows, cols, f
     if ( !(/\b3\d\d\b/.test(data[n])) ) data[n] = 0;
   }
 
-  write2D (data, rows, cols, 'terrainsmall.map') }
+  write2D (data, rows, cols, path.join(__dirname , 'terrainsmall.map')) }
 
 );
