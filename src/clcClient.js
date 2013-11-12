@@ -23,23 +23,53 @@ module.exports = function( N, S, E, W, rows, cols, cb){
   var width = parseFloat(E) - parseFloat(W);
   var height = parseFloat(N) - parseFloat(S);
 
-  var client = new pg.Client(config);
+  var client1 = new pg.Client(config);
+  var client2 = new pg.Client(config);
+  var client3 = new pg.Client(config);
+  var client4 = new pg.Client(config);
 
-  client.connect(function(err) {
+  client1.connect(function(err) {
     if(err) {
-      return console.error('could not connect to postgres', err);
+      return console.error('could not connect to postgres with client1:', err);
+  }});
+
+  client2.connect(function(err) {
+    if(err) {
+      return console.error('could not connect to postgres with client2:', err);
+  }});
+
+  client3.connect(function(err) {
+    if(err) {
+      return console.error('could not connect to postgres with client3:', err);
+  }});
+
+  client4.connect(function(err) {
+    if(err) {
+      return console.error('could not connect to postgres with client4:', err);
   }});
 
   //set variables
-  client.query('set search_path to "$user", "public", "gis_schema";');
+  client1.query('set search_path to "$user", "public", "gis_schema";');
+  client2.query('set search_path to "$user", "public", "gis_schema";');
+  client3.query('set search_path to "$user", "public", "gis_schema";');
+  client2.query('set search_path to "$user", "public", "gis_schema";');
 
   var map = new Array(rows*cols);
 
   var rendezVous = Rendezvous(rows*cols, function(){
-    client.end();
+    client1.end();
+    client2.end();
+    client3.end();
+    client4.end();
     cb(map);
   });
 
+  var clients = {
+    1: client1,
+    2: client2,
+    3: client3,
+    4: client4
+  };
 
   for (var row = 0; row < rows; row++ ){
     for (var col = 0; col < cols; col++ ){
@@ -49,7 +79,7 @@ module.exports = function( N, S, E, W, rows, cols, cb){
       var XX = parseFloat(W) + col/(cols-1)*width;
       var YY = parseFloat(N) - row/(rows-1)*height;
 
-      raster(client, XX, YY, storeCell(cell));
+      raster(clients, XX, YY, storeCell(cell));
 
     }
   }
@@ -62,9 +92,9 @@ module.exports = function( N, S, E, W, rows, cols, cb){
   }
 };
 
-function raster(client, XX, YY, cb){
+function raster(clArray, XX, YY, cb){
 
-  rasterLayer(client, XX, YY, onResult);
+  rasterLayer(clArray, XX, YY, onResult);
 
   function onResult (result) {
     cb(result);
@@ -76,13 +106,26 @@ function getPointString(XX,YY){
   return 'ST_GeomFromText(\'POINT('+ XX.toString() +' '+ YY.toString() +')\', 3035)';
 }
 
-function rasterLayer(client, XX, YY, cb){
+function rasterLayer(clients, XX, YY, cb){
 
   var pointString = getPointString(XX,YY);
 
   var queryString = 'select a.code_06 from merged_CLC2006_ as a where ST_Contains(a.the_geom, '+pointString+');';
-  client.query(queryString, onResults);
 
+  var r = quadDice();
+  function quadDice(){
+    var randomN = Math.random();
+    if (randomN < 0.25)
+      return 1;
+    else if ( randomN < 0.5)
+      return 2;
+    else if ( randomN < 0.75)
+      return 3;
+    else
+      return 4;
+  }
+
+  clients[r].query(queryString, onResults);
 
   function onResults(err, result){
 
