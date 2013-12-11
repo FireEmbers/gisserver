@@ -9,7 +9,7 @@ app.configure(function(){
   app.use(express.bodyParser());
 });
 
-app.post('/postgisdata', function(req, res){
+app.post('/clcdata', function(req, res){
 
   var N = req.body.north;
   var S = req.body.south;
@@ -21,10 +21,13 @@ app.post('/postgisdata', function(req, res){
 
   clcClient( N, S, E, W, rows, cols, cp);
 
-  function cp(data){
+  function cp(err, data){
+    if (err)
+      console.log(err);
+
     res.send(data);
   }
 
 });
-
-app.listen(8080);
+console.log('emberspsql listening on port 8881...');
+app.listen(8881);

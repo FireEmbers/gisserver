@@ -78,7 +78,8 @@ test('Testing clcClient', function (t) {
   getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows2, cols2, saveMap('big'));
 
   function saveMap(size) {
-    return function(data) {
+    return function(err, data) {
+      if (err) throw err;
       testMaps[size] = data;
       rendezVous();
     };

@@ -8,7 +8,7 @@ var config = {
   password: null,
   host: '/var/run/postgresql',
   database: 'gisdb',
-  port: '5433' //5432 at hicks, 5433 at baelish
+  port: '5432' //5432 at hicks, 5433 at baelish
 };
 
 function Rendezvous(count, cb) {
@@ -18,7 +18,7 @@ function Rendezvous(count, cb) {
   };
 }
 
-module.exports = function( N, S, E, W, rows, cols, cb){
+module.exports = function( N, S, E, W, rows, cols, callback){
 
   var width = parseFloat(E) - parseFloat(W);
   var height = parseFloat(N) - parseFloat(S);
@@ -30,29 +30,29 @@ module.exports = function( N, S, E, W, rows, cols, cb){
 
   client1.connect(function(err) {
     if(err) {
-      return console.error('could not connect to postgres with client1:', err);
+      return callback('could not connect to postgres with client1: '+ err, null);
   }});
 
   client2.connect(function(err) {
     if(err) {
-      return console.error('could not connect to postgres with client2:', err);
+      return callback('could not connect to postgres with client2: '+ err, null);
   }});
 
   client3.connect(function(err) {
     if(err) {
-      return console.error('could not connect to postgres with client3:', err);
+      return callback('could not connect to postgres with client3: '+ err, null);
   }});
 
   client4.connect(function(err) {
     if(err) {
-      return console.error('could not connect to postgres with client4:', err);
+      return callback('could not connect to postgres with client4: '+ err, null);
   }});
 
   //set variables
   client1.query('set search_path to "$user", "public", "gis_schema";');
   client2.query('set search_path to "$user", "public", "gis_schema";');
   client3.query('set search_path to "$user", "public", "gis_schema";');
-  client2.query('set search_path to "$user", "public", "gis_schema";');
+  client4.query('set search_path to "$user", "public", "gis_schema";');
 
   var map = new Array(rows*cols);
 
@@ -61,7 +61,7 @@ module.exports = function( N, S, E, W, rows, cols, cb){
     client2.end();
     client3.end();
     client4.end();
-    cb(map);
+    callback(null, map);
   });
 
   var clients = {
@@ -90,46 +90,48 @@ module.exports = function( N, S, E, W, rows, cols, cb){
       rendezVous();
     }
   }
+
+
+  function raster(clArray, XX, YY, cb){
+
+    rasterLayer(clArray, XX, YY, onResult);
+
+    function onResult (result) {
+      cb(result);
+    }
+
+  }
+
+  function getPointString(XX,YY){
+    return 'ST_GeomFromText(\'POINT('+ XX.toString() +' '+ YY.toString() +')\', 3035)';
+  }
+
+  function rasterLayer(clients, XX, YY, cb){
+
+    var pointString = getPointString(XX,YY);
+
+    var queryString = 'select a.code_06 from merged_CLC2006_ as a where ST_Contains(a.the_geom, '+pointString+');';
+
+    var r = quadDice();
+    function quadDice(){
+      var randomN = Math.random();
+      if (randomN < 0.25)
+        return 1;
+      else if ( randomN < 0.5)
+        return 2;
+      else if ( randomN < 0.75)
+        return 3;
+      else
+        return 4;
+    }
+
+    clients[r].query(queryString, onResults);
+
+    function onResults(err, result){
+
+      if (err) callback(err, null);
+      cb( result.rows[0]['code_06'] );
+    }
+  }
+
 };
-
-function raster(clArray, XX, YY, cb){
-
-  rasterLayer(clArray, XX, YY, onResult);
-
-  function onResult (result) {
-    cb(result);
-  }
-
-}
-
-function getPointString(XX,YY){
-  return 'ST_GeomFromText(\'POINT('+ XX.toString() +' '+ YY.toString() +')\', 3035)';
-}
-
-function rasterLayer(clients, XX, YY, cb){
-
-  var pointString = getPointString(XX,YY);
-
-  var queryString = 'select a.code_06 from merged_CLC2006_ as a where ST_Contains(a.the_geom, '+pointString+');';
-
-  var r = quadDice();
-  function quadDice(){
-    var randomN = Math.random();
-    if (randomN < 0.25)
-      return 1;
-    else if ( randomN < 0.5)
-      return 2;
-    else if ( randomN < 0.75)
-      return 3;
-    else
-      return 4;
-  }
-
-  clients[r].query(queryString, onResults);
-
-  function onResults(err, result){
-
-    if (err) throw err;
-    cb( result.rows[0]['code_06'] );
-  }
-}

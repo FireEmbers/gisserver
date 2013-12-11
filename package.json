@@ -1,9 +1,11 @@
 {
-  "name": "emberspgs",
+  "name": "emberspsql",
   "version": "0.1.0",
   "description": "ERROR: No README.md file found!",
-  "main": "postgisServer.js",
-  "bin": "postgisServer.js",
+  "main": "emberspsql.js",
+  "bin": {
+    "emberspsql": "emberspsql.js"
+  },
   "scripts": {
     "test": "tap test/testCorine.js"
   },
@@ -19,13 +21,15 @@
     "embersutils": "git+ssh://git@github.com:FireEmbers/utils.git",
     "express": "~3.3.4"
   },
-  "readmeFilename": "Readme.md",
-  "gitHead": "c9eb4524f7c2b57a06f9a6b0c445cae406f1d40f",
-  "directories": {
-    "doc": "docs",
-    "test": "test"
-  },
   "devDependencies": {
     "tap": "~0.4.3"
+  },
+  "ploy": {
+    "excludes": [
+      "docs"
+    ],
+    "tags": [
+      "famiglia"
+    ]
   }
 }
