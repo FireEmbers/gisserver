@@ -1,7 +1,7 @@
 //The clc layers are all in one table merged_CLC2006_
 //there's only data available for portugal cont.
 
-var pg = require('pg');
+var pg = require('pg').native;
 
 var config = {
   user: 'fsousa',
@@ -18,6 +18,7 @@ function Rendezvous(count, cb) {
   };
 }
 
+var qc = 0
 module.exports = function( N, S, E, W, rows, cols, callback){
 
   var width = parseFloat(E) - parseFloat(W);
@@ -88,7 +89,7 @@ module.exports = function( N, S, E, W, rows, cols, callback){
     return function(data){
       map[cell] = data;
       rendezVous();
-    }
+    };
   }
 
 
@@ -110,8 +111,6 @@ module.exports = function( N, S, E, W, rows, cols, callback){
 
     var pointString = getPointString(XX,YY);
 
-    var queryString = 'select a.code_06 from merged_CLC2006_ as a where ST_Contains(a.the_geom, '+pointString+');';
-
     var r = quadDice();
     function quadDice(){
       var randomN = Math.random();
@@ -124,6 +123,8 @@ module.exports = function( N, S, E, W, rows, cols, callback){
       else
         return 4;
     }
+
+    var queryString = 'select a.code_06 from merged_CLC2006_ as a where ST_Contains(a.the_geom, '+pointString+') limit 1;';
 
     clients[r].query(queryString, onResults);
 

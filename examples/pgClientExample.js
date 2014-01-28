@@ -1,7 +1,7 @@
 var getCorine = require('./../src/clcClient');
 var write2D = require('embersutils').write2D;
 var cconv= require('cconv');
-var path = require('path')
+var path = require('path');
 
 var sridA = 4258;
 var sridB = 3035;
@@ -23,6 +23,7 @@ var S = cB[1] - width/2;
 console.log('var W = ',W+';');
 console.log('var E = ',E+';');
 console.log('var N = ',N+';');
+
 console.log('var S = ',S+';');
 
 
@@ -34,7 +35,7 @@ console.log('map height:', N-S);
 
 console.log('Bounding Box:\n', N,S,E,W);
 
-getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows, cols, function(err, data){ 
+getCorine( N.toString(), S.toString(), E.toString(), W.toString(), rows, cols, function(err, data){
 
   console.log('done');
 
